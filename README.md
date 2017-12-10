@@ -8,6 +8,7 @@ Math::GComplex provides a generic interface to complex number operations, accept
 
 # SYNOPSIS
 
+```perl
     use 5.010;
     use Math::GComplex;
     use Math::AnyNum qw(:overload);
@@ -19,6 +20,7 @@ Math::GComplex provides a generic interface to complex number operations, accept
     say $x - $y;        #=> (-4 -1)
     say $x * $y;        #=> (1 43)
     say $x / $y;        #=> (41/74 13/74)
+```
 
 # INSTALLATION
 
