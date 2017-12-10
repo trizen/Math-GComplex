@@ -55,7 +55,11 @@ use overload
 
 sub new {
     my ($class, $x, $y) = @_;
-    bless {a => $x, b => $y}, $class;
+
+    bless {
+           a => $x // 0,
+           b => $y // 0,
+          }, $class;
 }
 
 #
