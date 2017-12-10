@@ -94,7 +94,7 @@ sub mul {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    __PACKAGE__->new($x->{a} * $y->{a} - $x->{b}*$y->{b}, $x->{a}*$y->{b} + $x->{b}*$y->{a});
+    __PACKAGE__->new($x->{a} * $y->{a} - $x->{b} * $y->{b}, $x->{a} * $y->{b} + $x->{b} * $y->{a});
 }
 
 #
@@ -107,12 +107,9 @@ sub div {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    # TODO: try to optimize this
+    my $d = $y->{a} * $y->{a} + $y->{b} * $y->{b};
 
-    my $num = $x * $y->conj;
-    my $den = $y->{a} * $y->{a} + $y->{b}*$y->{b};
-
-    __PACKAGE__->new($num->{a} / $den, $num->{b} / $den);
+    __PACKAGE__->new(($x->{a} * $y->{a} + $x->{b} * $y->{b}) / $d, ($x->{b} * $y->{a} - $x->{a} * $y->{b}) / $d);
 }
 
 sub conj {
@@ -129,8 +126,8 @@ sub eq {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-        $x->{a} == $y->{a}
-    and $x->{b} == $y->{b};
+    $x->{a} == $y->{a}
+      and $x->{b} == $y->{b};
 }
 
 sub ne {
@@ -139,8 +136,8 @@ sub ne {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-       $x->{a} != $y->{a}
-    or $x->{b} != $y->{b};
+    $x->{a} != $y->{a}
+      or $x->{b} != $y->{b};
 }
 
 sub cmp {
@@ -149,8 +146,8 @@ sub cmp {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-       ($x->{a} <=> $y->{a})
-    or ($x->{b} <=> $y->{b});
+    ($x->{a} <=> $y->{a})
+      or ($x->{b} <=> $y->{b});
 }
 
 sub lt {
@@ -205,4 +202,4 @@ sub numify {
     $x->{a};
 }
 
-1; # End of Math::GComplex
+1;    # End of Math::GComplex
