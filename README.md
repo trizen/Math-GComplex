@@ -9,17 +9,17 @@ Math::GComplex provides a generic interface to complex number operations, accept
 # SYNOPSIS
 
 ```perl
-    use 5.010;
-    use Math::GComplex;
-    use Math::AnyNum qw(:overload);
+use 5.010;
+use Math::GComplex;
+use Math::AnyNum qw(:overload);
 
-    my $x = Math::GComplex->new(3, 4);
-    my $y = Math::GComplex->new(7, 5);
+my $x = Math::GComplex->new(3, 4);
+my $y = Math::GComplex->new(7, 5);
 
-    say $x + $y;        #=> (10 9)
-    say $x - $y;        #=> (-4 -1)
-    say $x * $y;        #=> (1 43)
-    say $x / $y;        #=> (41/74 13/74)
+say $x + $y;        #=> (10 9)
+say $x - $y;        #=> (-4 -1)
+say $x * $y;        #=> (1 43)
+say $x / $y;        #=> (41/74 13/74)
 ```
 
 # INSTALLATION
