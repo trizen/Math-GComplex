@@ -1,7 +1,7 @@
 ---
 abstract: 'Generic complex number library.'
 author:
-  - "Daniel \"Trizen\" È\x98uteu <trizen@protonmail.com>"
+  - 'Daniel "Trizen" Șuteu <trizen@protonmail.com>'
 build_requires:
   Test::More: '0'
 configure_requires:
@@ -17,7 +17,14 @@ provides:
   Math::GComplex:
     file: lib/Math/GComplex.pm
     version: '0.01'
+recommends:
+  Math::AnyNum: '0.19'
+requires:
+  perl: '5.014'
 resources:
+  bugtracker: https://github.com/trizen/Math-GComplex/issues
+  homepage: https://github.com/trizen/Math-GComplex
   license: http://www.perlfoundation.org/artistic_license_2_0
+  repository: https://github.com/trizen/Math-GComplex
 version: '0.01'
 x_serialization_backend: 'CPAN::Meta::YAML version 0.018'

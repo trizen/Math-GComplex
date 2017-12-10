@@ -1,3 +1,5 @@
+
+use utf8;
 use 5.006;
 use strict;
 use warnings;
@@ -9,6 +11,15 @@ my $builder = Module::Build->new(
     dist_author         => q{Daniel "Trizen" Șuteu <trizen@protonmail.com>},
     dist_version_from   => 'lib/Math/GComplex.pm',
     release_status      => 'stable',
+
+    meta_merge => {
+                   resources => {
+                                 bugtracker => "https://github.com/trizen/Math-GComplex/issues",
+                                 homepage   => "https://github.com/trizen/Math-GComplex",
+                                 repository => "https://github.com/trizen/Math-GComplex",
+                                },
+                  },
+
     configure_requires => {
         'Module::Build' => '0',
     },
@@ -16,10 +27,13 @@ my $builder = Module::Build->new(
         'Test::More' => '0',
     },
     requires => {
-        #'ABC'              => '1.6',
-        #'Foo::Bar::Module' => '5.0401',
+        perl => '5.014',
+    },
+    recommends => {
+        'Math::AnyNum' => 0.19,
     },
     add_to_cleanup     => [ 'Math-GComplex-*' ],
+    create_makefile_pl => 'traditional',
 );
 
 $builder->create_build_script();
