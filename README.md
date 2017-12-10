@@ -2,6 +2,24 @@
 
 A generic complex number library for Perl 5.
 
+# DESCRIPTION
+
+Math::GComplex provides a generic interface to complex number operations, accepting any type of number in its containers, including numerical objects provided by other mathematical libraries, such as [Math::AnyNum](https://metacpan.org/release/Math-AnyNum).
+
+# SYNOPSIS
+
+    use 5.010;
+    use Math::GComplex;
+    use Math::AnyNum qw(:overload);
+
+    my $x = Math::GComplex->new(3, 4);
+    my $y = Math::GComplex->new(7, 5);
+
+    say $x + $y;        #=> (10 9)
+    say $x - $y;        #=> (-4 -1)
+    say $x * $y;        #=> (1 43)
+    say $x / $y;        #=> (41/74 13/74)
+
 # INSTALLATION
 
 To install this module, run the following commands:

@@ -10,6 +10,8 @@ Version 0.01
 
 =head1 SYNOPSIS
 
+Math::GComplex provides a generic interface to complex number operations, accepting any type of number in its containers, including numerical objects provided by other mathematical libraries, such as L<Math::AnyNum>.
+
     use 5.010;
     use Math::GComplex;
     use Math::AnyNum qw(:overload);
@@ -20,7 +22,7 @@ Version 0.01
     say $x + $y;        #=> (10 9)
     say $x - $y;        #=> (-4 -1)
     say $x * $y;        #=> (1 43)
-    say $x / $y;        #=> (41/47 13/74)
+    say $x / $y;        #=> (41/74 13/74)
 
 =head1 EXPORT
 
@@ -50,7 +52,15 @@ Multiplication of C<$x> and C<$y>.
 
 =head2 div
 
+    $x / $y
+
 Division of C<$x> by C<$y>.
+
+=head2 conj
+
+    $x->conj
+
+Complex conjugate of C<$x>.
 
 =head1 AUTHOR
 

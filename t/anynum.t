@@ -11,7 +11,7 @@ BEGIN {
         if $@;
 }
 
-plan tests => 4;
+plan tests => 5;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -23,3 +23,5 @@ is($x + $y, '(10 9)');
 is($x - $y, '(-4 -1)');
 is($x * $y, '(1 43)');
 is($x / $y, '(41/74 13/74)');
+
+is($x->conj, '(3 -4)');
