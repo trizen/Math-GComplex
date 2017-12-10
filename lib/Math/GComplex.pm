@@ -64,6 +64,10 @@ sub new {
 
 sub add {
     my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
     __PACKAGE__->new($x->{a} + $y->{a}, $x->{b} + $y->{b});
 }
 
@@ -73,6 +77,10 @@ sub add {
 
 sub sub {
     my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
     __PACKAGE__->new($x->{a} - $y->{a}, $x->{b} - $y->{b});
 }
 
@@ -82,6 +90,10 @@ sub sub {
 
 sub mul {
     my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
     __PACKAGE__->new($x->{a} * $y->{a} - $x->{b}*$y->{b}, $x->{a}*$y->{b} + $x->{b}*$y->{a});
 }
 
@@ -91,6 +103,9 @@ sub mul {
 
 sub div {
     my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
     # TODO: try to optimize this
 
@@ -102,12 +117,92 @@ sub div {
 
 sub conj {
     my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
     __PACKAGE__->new($x->{a}, -$x->{b});
+}
+
+sub eq {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+        $x->{a} == $y->{a}
+    and $x->{b} == $y->{b};
+}
+
+sub ne {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+       $x->{a} != $y->{a}
+    or $x->{b} != $y->{b};
+}
+
+sub cmp {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+       ($x->{a} <=> $y->{a})
+    or ($x->{b} <=> $y->{b});
+}
+
+sub lt {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->cmp($y) < 0;
+}
+
+sub le {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->cmp($y) <= 0;
+}
+
+sub gt {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->cmp($y) > 0;
+}
+
+sub ge {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->cmp($y) >= 0;
 }
 
 sub stringify {
     my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
     "($x->{a} $x->{b})";
+}
+
+sub numify {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->{a};
 }
 
 1; # End of Math::GComplex

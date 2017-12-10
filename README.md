@@ -40,17 +40,17 @@ perldoc command.
 
 You can also look for information at:
 
-    Github
-        https://github.com/trizen/Math-GComplex
+* Github
+    - https://github.com/trizen/Math-GComplex
 
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Math-GComplex
+* AnnoCPAN, Annotated CPAN documentation
+    - http://annocpan.org/dist/Math-GComplex
 
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Math-GComplex
+* CPAN Ratings
+    - http://cpanratings.perl.org/d/Math-GComplex
 
-    Search CPAN
-        http://search.cpan.org/dist/Math-GComplex/
+* Search CPAN
+    - http://search.cpan.org/dist/Math-GComplex/
 
 # LICENSE AND COPYRIGHT
 
