@@ -9,7 +9,6 @@ our $VERSION = '0.01';
 state $MONE = __PACKAGE__->new(-1, 0);
 state $ZERO = __PACKAGE__->new(+0, 0);
 state $ONE  = __PACKAGE__->new(+1, 0);
-state $TWO  = __PACKAGE__->new(+2, 0);
 
 state $I = __PACKAGE__->new(+0, 1);
 
@@ -144,7 +143,7 @@ sub sgn {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    if ($x == $ZERO) {
+    if ($x->{a} == 0 and $x->{b} == 0) {
         return $ZERO;
     }
 
@@ -209,7 +208,12 @@ sub sqrt {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    $x->log->div($TWO)->exp;
+    my $r = $x->log;
+
+    $r->{a} /= 2;
+    $r->{b} /= 2;
+
+    $r->exp;
 }
 
 #
@@ -242,6 +246,49 @@ sub sin {
 }
 
 #
+## cos(a + b*i) = (exp(-b + i*a) + exp(b - i*a))/2
+#
+
+sub cos {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+    my $t2 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+
+    __PACKAGE__->new(($t1->{a} + $t2->{a}) / 2, ($t1->{b} + $t2->{b}) / 2);
+}
+
+#
+## tan(a + b*i) = (2*i)/(exp(2*i*(a + b*i)) + 1) - i
+#
+
+sub tan {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $r = __PACKAGE__->new(-2 * $x->{b}, 2 * $x->{a})->exp;
+
+    $r->{a} += 1;
+
+    my $den = $r->{a} * $r->{a} + $r->{b} * $r->{b};
+
+    $r->{a} *= 2;
+    $r->{b} *= 2;
+
+    $r->{a} /= $den;
+    $r->{b} /= $den;
+
+    $r->{a} -= 1;
+
+    @{$r}{'a', 'b'} = ($r->{b}, $r->{a});
+
+    $r;
+}
+
+#
 ## asin(a + b*i) = -i*log(sqrt(1 - (a + b*i)^2) + i*a - b)
 #
 
@@ -258,6 +305,56 @@ sub asin {
     $r = $r->log;
     @{$r}{'a', 'b'} = ($r->{b}, -$r->{a});
     $r;
+}
+
+#
+## acos(a + b*i) = -2*i*log(i*sqrt((1 - (a + b*i))/2) + sqrt((1 + (a + b*i))/2))
+#
+
+sub acos {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new((1 - $x->{a}) / 2, -$x->{b} / 2)->sqrt;
+    my $t2 = __PACKAGE__->new((1 + $x->{a}) / 2, $x->{b} / 2)->sqrt;
+
+    @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
+
+    $t1->{a} += $t2->{a};
+    $t1->{b} += $t2->{b};
+
+    my $r = $t1->log;
+
+    $r->{a} *= -2;
+    $r->{b} *= -2;
+
+    @{$r}{'a', 'b'} = (-$r->{b}, $r->{a});
+
+    $r;
+}
+
+#
+## atan(a + b*i) = i * (log(1 - i*(a + b*i)) - log(1 + i*(a + b*i))) / 2
+#
+
+sub atan {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{b} + 1,  -$x->{a})->log;
+    my $t2 = __PACKAGE__->new(-$x->{b} + 1, $x->{a})->log;
+
+    $t1->{a} -= $t2->{a};
+    $t1->{b} -= $t2->{b};
+
+    $t1->{a} /= 2;
+    $t1->{b} /= 2;
+
+    @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
+
+    $t1;
 }
 
 #
@@ -282,6 +379,44 @@ sub sinh {
 }
 
 #
+## cosh(a + b*i) = (exp(2 * (a + b*i)) + 1) / (2*exp(a + b*i))
+#
+
+sub cosh {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{a} * 2, $x->{b} * 2)->exp;
+
+    $t1->{a} += 1;
+
+    my $t2 = $x->exp;
+
+    $t2->{a} *= 2;
+    $t2->{b} *= 2;
+
+    $t1->div($t2);
+}
+
+#
+## tanh(a + b*i) = (exp(2 * (a + b*i)) - 1) / (exp(2 * (a + b*i)) + 1)
+#
+
+sub tanh {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{a} * 2, $x->{b} * 2)->exp;
+
+    my $t2 = __PACKAGE__->new($t1->{a} - 1, $t1->{b});
+    my $t3 = __PACKAGE__->new($t1->{a} + 1, $t1->{b});
+
+    $t2->div($t3);
+}
+
+#
 ## asinh(a + b*i) = log(sqrt((a + b*i)^2 + 1) + (a + b*i))
 #
 
@@ -299,18 +434,44 @@ sub asinh {
 }
 
 #
-## cos(a + b*i) = (exp(-b + i*a) + exp(b - i*a))/2
+## acosh(a + b*i) = log((a + b*i) + sqrt((a + b*i) - 1) * sqrt((a + b*i) + 1))
 #
 
-sub cos {
+sub acosh {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
-    my $t2 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+    my $t1 = __PACKAGE__->new($x->{a} - 1, $x->{b})->sqrt;
+    my $t2 = __PACKAGE__->new($x->{a} + 1, $x->{b})->sqrt;
 
-    __PACKAGE__->new(($t1->{a} + $t2->{a}) / 2, ($t1->{b} + $t2->{b}) / 2);
+    my $t3 = $t1->mul($t2);
+
+    $t3->{a} += $x->{a};
+    $t3->{b} += $x->{b};
+
+    $t3->log;
+}
+
+#
+## atanh(a + b*i) = (log(1 + (a + b*i)) - log(1 - (a + b*i))) / 2
+#
+
+sub atanh {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{a} + 1, $x->{b})->log;
+    my $t2 = __PACKAGE__->new(1 - $x->{a}, -$x->{b})->log;
+
+    $t1->{a} -= $t2->{a};
+    $t1->{b} -= $t2->{b};
+
+    $t1->{a} /= 2;
+    $t1->{b} /= 2;
+
+    $t1;
 }
 
 #
