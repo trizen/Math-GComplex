@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 16;
+plan tests => 32;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -40,3 +40,25 @@ is(join(' ', abs($y)->reals), join(' ', abs(7 + 5 * i)->reals));
 is(join(' ', $x->sgn->reals),      '0.6 0.8');
 is(join(' ', $x->neg->sgn->reals), '-0.6 -0.8');
 is(join(' ', Math::GComplex->new(0, 0)->sgn->reals), '0 0');
+
+is(join(' ', sin($x)->reals),            join(' ', sin(3 + 4 * i)->reals));
+is(join(' ', sin($x->conj)->reals),      join(' ', sin(3 - 4 * i)->reals));
+is(join(' ', sin($x->neg->conj)->reals), join(' ', sin(-3 + 4 * i)->reals));
+
+is(join(' ', cos($x)->reals),            join(' ', cos(3 + 4 * i)->reals));
+is(join(' ', cos($x->conj)->reals),      join(' ', cos(3 - 4 * i)->reals));
+is(join(' ', cos($x->neg->conj)->reals), join(' ', cos(-3 + 4 * i)->reals));
+
+is(join(' ', ($x**$y)->reals), join(' ', ((3 + 4 * i)**(7 + 5 * i))->reals));
+is(join(' ', Math::GComplex->new(-0.123, 0)->pow(0.42)->reals), join(' ', ((-0.123)**0.42)->reals));
+is(join(' ', Math::GComplex->new(3, 0)->pow(Math::GComplex->new(0, 5))->reals), join(' ', (3**(5 * i))->reals));
+is(join(' ', Math::GComplex->new(3, 0)->pow(Math::GComplex->new(5, 0))->reals), '243 0');
+
+is(join(' ', exp($x)->reals),      join(' ', exp(3 + 4 * i)->reals));
+is(join(' ', exp($x->neg)->reals), join(' ', exp(-3 - 4 * i)->reals));
+
+is(join(' ', Math::GComplex->new(13, 0)->sin->reals),  join(' ', sin(13)->reals));
+is(join(' ', Math::GComplex->new(0,  13)->sin->reals), join(' ', sin(13 * i)->reals));
+
+is(join(' ', Math::GComplex->new(13, 0)->cos->reals),  join(' ', cos(13)->reals));
+is(join(' ', Math::GComplex->new(0,  13)->cos->reals), join(' ', cos(13 * i)->reals));

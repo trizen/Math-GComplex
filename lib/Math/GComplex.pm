@@ -9,6 +9,7 @@ our $VERSION = '0.01';
 state $MONE = __PACKAGE__->new(-1, 0);
 state $ZERO = __PACKAGE__->new(0,  0);
 state $ONE  = __PACKAGE__->new(1,  0);
+state $I    = __PACKAGE__->new(0,  1);
 
 use overload
   '""' => \&stringify,
@@ -182,6 +183,63 @@ sub log {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     __PACKAGE__->new(CORE::log($x->{a} * $x->{a} + $x->{b} * $x->{b}) / 2, CORE::atan2($x->{b}, $x->{a}));
+}
+
+#
+## (a + b*i)^x = exp(log(a+b*i) * x)
+#
+
+sub pow {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->log->mul($y)->exp;
+}
+
+#
+## exp(a + b*i) = exp(a)*cos(b) + exp(a)*sin(b)*i
+#
+
+sub exp {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $e = CORE::exp($x->{a});
+
+    __PACKAGE__->new($e * CORE::cos($x->{b}), $e * CORE::sin($x->{b}));
+}
+
+#
+## sin(a + b*i) = i*(exp(b - i*a) - exp(-b + i*a))/2
+#
+
+sub sin {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+
+    __PACKAGE__->new(($t1->{b} - $t2->{b}) / -2, ($t1->{a} - $t2->{a}) / 2);
+}
+
+#
+## cos(a + b*i) = (exp(-b + i*a) + exp(b - i*a))/2
+#
+
+sub cos {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+    my $t2 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+
+    __PACKAGE__->new(($t1->{a} + $t2->{a}) / 2, ($t1->{b} + $t2->{b}) / 2);
 }
 
 #
