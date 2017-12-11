@@ -48,7 +48,7 @@ use overload
   sin  => \&sin,
   cos  => \&cos,
   exp  => \&exp,
-  log  => \&ln,
+  log  => \&log,
   int  => \&int,
   abs  => \&abs,
   sqrt => \&sqrt;
@@ -116,6 +116,34 @@ sub div {
     __PACKAGE__->new(($x->{a} * $y->{a} + $x->{b} * $y->{b}) / $d, ($x->{b} * $y->{a} - $x->{a} * $y->{b}) / $d);
 }
 
+#
+## abs(a + b*i) = sqrt(a^2 + b^2)
+#
+
+sub abs {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    CORE::sqrt($x->{a} * $x->{a} + $x->{b} * $x->{b});
+}
+
+#
+## neg(a + b*i) = -a - b*i
+#
+
+sub neg {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    __PACKAGE__->new(-$x->{a}, -$x->{b});
+}
+
+#
+## conj(a + b*i) = a - b*i
+#
+
 sub conj {
     my ($x) = @_;
 
@@ -123,6 +151,30 @@ sub conj {
 
     __PACKAGE__->new($x->{a}, -$x->{b});
 }
+
+#
+## log(a + b*i) = log(a^2 + b^2)/2 + atan(b/a)*i
+#
+
+sub log {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    __PACKAGE__->new(CORE::log($x->{a} * $x->{a} + $x->{b} * $x->{b}) / 2, CORE::atan2($x->{b}, $x->{a}));
+}
+
+sub reals {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    ($x->{a}, $x->{b});
+}
+
+#
+## Equality
+#
 
 sub eq {
     my ($x, $y) = @_;
@@ -134,6 +186,10 @@ sub eq {
       and $x->{b} == $y->{b};
 }
 
+#
+## Inequality
+#
+
 sub ne {
     my ($x, $y) = @_;
 
@@ -143,6 +199,10 @@ sub ne {
     $x->{a} != $y->{a}
       or $x->{b} != $y->{b};
 }
+
+#
+## Comparisons
+#
 
 sub cmp {
     my ($x, $y) = @_;
