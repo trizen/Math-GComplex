@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 13;
+plan tests => 16;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -19,13 +19,13 @@ use Math::AnyNum qw(:overload);
 my $x = Math::GComplex->new(3, 4);
 my $y = Math::GComplex->new(7, 5);
 
-is($x + $y, '(10 9)');
-is($x - $y, '(-4 -1)');
-is($x * $y, '(1 43)');
-is($x / $y, '(41/74 13/74)');
+is(join(' ', ($x + $y)->reals), '10 9');
+is(join(' ', ($x - $y)->reals), '-4 -1');
+is(join(' ', ($x * $y)->reals), '1 43');
+is(join(' ', ($x / $y)->reals), '41/74 13/74');
 
-is($x->conj, '(3 -4)');
-is(-$y,      '(-7 -5)');
+is(join(' ', $x->conj->reals), '3 -4');
+is(join(' ', (-$y)->reals), '-7 -5');
 
 is(join(' ', log($x)->reals), join(' ', log(3 + 4 * i)->reals));
 is(join(' ', log($y)->reals), join(' ', log(7 + 5 * i)->reals));
@@ -36,3 +36,7 @@ is(join(' ', log(-($x->conj))->reals), join(' ', log(-3 + 4 * i)->reals));
 
 is(join(' ', abs($x)->reals), '5 0');
 is(join(' ', abs($y)->reals), join(' ', abs(7 + 5 * i)->reals));
+
+is(join(' ', $x->sgn->reals),      '0.6 0.8');
+is(join(' ', $x->neg->sgn->reals), '-0.6 -0.8');
+is(join(' ', Math::GComplex->new(0, 0)->sgn->reals), '0 0');

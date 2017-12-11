@@ -6,6 +6,10 @@ use warnings;
 
 our $VERSION = '0.01';
 
+state $MONE = __PACKAGE__->new(-1, 0);
+state $ZERO = __PACKAGE__->new(0,  0);
+state $ONE  = __PACKAGE__->new(1,  0);
+
 use overload
   '""' => \&stringify,
   '0+' => \&numify,
@@ -129,6 +133,22 @@ sub abs {
 }
 
 #
+## sgn(a + b*i) = (a + b*i) / abs(a + b*i)
+#
+
+sub sgn {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    if ($x == $ZERO) {
+        return $ZERO;
+    }
+
+    $x->div($x->abs);
+}
+
+#
 ## neg(a + b*i) = -a - b*i
 #
 
@@ -163,6 +183,10 @@ sub log {
 
     __PACKAGE__->new(CORE::log($x->{a} * $x->{a} + $x->{b} * $x->{b}) / 2, CORE::atan2($x->{b}, $x->{a}));
 }
+
+#
+## reals(a + b*i) = (a, b)
+#
 
 sub reals {
     my ($x) = @_;
