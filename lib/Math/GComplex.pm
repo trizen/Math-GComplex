@@ -7,9 +7,11 @@ use warnings;
 our $VERSION = '0.01';
 
 state $MONE = __PACKAGE__->new(-1, 0);
-state $ZERO = __PACKAGE__->new(0,  0);
-state $ONE  = __PACKAGE__->new(1,  0);
-state $I    = __PACKAGE__->new(0,  1);
+state $ZERO = __PACKAGE__->new(+0, 0);
+state $ONE  = __PACKAGE__->new(+1, 0);
+state $TWO  = __PACKAGE__->new(+2, 0);
+
+state $I = __PACKAGE__->new(+0, 1);
 
 use overload
   '""' => \&stringify,
@@ -122,6 +124,18 @@ sub div {
 }
 
 #
+## sqrt(a + b*i) = exp(log(a + b*i) / 2)
+#
+
+sub sqrt {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->log->div($TWO)->exp;
+}
+
+#
 ## abs(a + b*i) = sqrt(a^2 + b^2)
 #
 
@@ -207,9 +221,9 @@ sub exp {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $e = CORE::exp($x->{a});
+    my $exp = CORE::exp($x->{a});
 
-    __PACKAGE__->new($e * CORE::cos($x->{b}), $e * CORE::sin($x->{b}));
+    __PACKAGE__->new($exp * CORE::cos($x->{b}), $exp * CORE::sin($x->{b}));
 }
 
 #

@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 32;
+plan tests => 37;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -62,3 +62,10 @@ is(join(' ', Math::GComplex->new(0,  13)->sin->reals), join(' ', sin(13 * i)->re
 
 is(join(' ', Math::GComplex->new(13, 0)->cos->reals),  join(' ', cos(13)->reals));
 is(join(' ', Math::GComplex->new(0,  13)->cos->reals), join(' ', cos(13 * i)->reals));
+
+is(join(' ', map { $_->round(-50) } sqrt(Math::GComplex->new(-1, 0))->reals), '0 1');
+is(join(' ', map { $_->round(-50) } sqrt(Math::GComplex->new(-4, 0))->reals), '0 2');
+
+is(join(' ', $x->sqrt->reals), '2 1');
+is(join(' ', $y->neg->sqrt->reals),       join(' ', sqrt(-7 - 5 * i)->reals));
+is(join(' ', $y->neg->conj->sqrt->reals), join(' ', sqrt(-7 + 5 * i)->reals));
