@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 71;
+plan tests => 85;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -110,8 +110,27 @@ is(join(' ', $y->atan->reals),            join(' ', (7 + 5 * i)->atan->reals));
 is(join(' ', $y->conj->atan->reals),      join(' ', (7 - 5 * i)->atan->reals));
 is(join(' ', $y->neg->conj->atan->reals), join(' ', (-7 + 5 * i)->atan->reals));
 
+is(join(' ', $y->cot->reals),            join(' ', (7 + 5 * i)->cot->reals));
+is(join(' ', $y->cot->conj->reals),      join(' ', (7 - 5 * i)->cot->reals));
+is(join(' ', $y->cot->neg->conj->reals), join(' ', (-7 + 5 * i)->cot->reals));
+
+is(join(' ', $y->coth->reals),            join(' ', (7 + 5 * i)->coth->reals));
+is(join(' ', $y->coth->conj->reals),      join(' ', (7 - 5 * i)->coth->reals));
+is(join(' ', $y->coth->neg->conj->reals), join(' ', (-7 + 5 * i)->coth->reals));
+
+is(join(' ', $y->acot->reals),            join(' ', (7 + 5 * i)->acot->reals));
+is(join(' ', $y->acot->conj->reals),      join(' ', (7 - 5 * i)->acot->reals));
+is(join(' ', $y->acot->neg->conj->reals), join(' ', (-7 + 5 * i)->acot->reals));
+
+is(join(' ', $y->acoth->reals),            join(' ', (7 + 5 * i)->acoth->reals));
+is(join(' ', $y->acoth->conj->reals),      join(' ', (7 - 5 * i)->acoth->reals));
+is(join(' ', $y->acoth->neg->conj->reals), join(' ', (-7 + 5 * i)->acoth->reals));
+
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(1 / 2,  0)->asin->reals), join(' ', (0.5)->asin->reals));
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(-1 / 2, 0)->asin->reals), join(' ', (-0.5)->asin->reals));
 
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(0, 1 / 2)->asin->reals),  join(' ', (0.5 * i)->asin->reals));
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(0, -1 / 2)->asin->reals), join(' ', (-0.5 * i)->asin->reals));
+
+is(join(' ', Math::GComplex->new(0)->atan->reals),   '0 0');
+is(join(' ', Math::GComplex->new('0')->atan->reals), '0 0');
