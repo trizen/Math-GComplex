@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 37;
+plan tests => 50;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -69,3 +69,21 @@ is(join(' ', map { $_->round(-50) } sqrt(Math::GComplex->new(-4, 0))->reals), '0
 is(join(' ', $x->sqrt->reals), '2 1');
 is(join(' ', $y->neg->sqrt->reals),       join(' ', sqrt(-7 - 5 * i)->reals));
 is(join(' ', $y->neg->conj->sqrt->reals), join(' ', sqrt(-7 + 5 * i)->reals));
+
+is(join(' ', $x->asin->reals),            join(' ', (3 + 4 * i)->asin->reals));
+is(join(' ', $x->conj->asin->reals),      join(' ', (3 - 4 * i)->asin->reals));
+is(join(' ', $x->neg->conj->asin->reals), join(' ', (-3 + 4 * i)->asin->reals));
+
+is(join(' ', $y->sinh->reals),            join(' ', (7 + 5 * i)->sinh->reals));
+is(join(' ', $y->conj->sinh->reals),      join(' ', (7 - 5 * i)->sinh->reals));
+is(join(' ', $y->neg->conj->sinh->reals), join(' ', (-7 + 5 * i)->sinh->reals));
+
+is(join(' ', $y->asinh->reals),            join(' ', (7 + 5 * i)->asinh->reals));
+is(join(' ', $y->conj->asinh->reals),      join(' ', (7 - 5 * i)->asinh->reals));
+is(join(' ', $y->neg->conj->asinh->reals), join(' ', (-7 + 5 * i)->asinh->reals));
+
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(1 / 2,  0)->asin->reals), join(' ', (0.5)->asin->reals));
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(-1 / 2, 0)->asin->reals), join(' ', (-0.5)->asin->reals));
+
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(0, 1 / 2)->asin->reals),  join(' ', (0.5 * i)->asin->reals));
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(0, -1 / 2)->asin->reals), join(' ', (-0.5 * i)->asin->reals));

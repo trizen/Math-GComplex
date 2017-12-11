@@ -124,18 +124,6 @@ sub div {
 }
 
 #
-## sqrt(a + b*i) = exp(log(a + b*i) / 2)
-#
-
-sub sqrt {
-    my ($x) = @_;
-
-    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
-
-    $x->log->div($TWO)->exp;
-}
-
-#
 ## abs(a + b*i) = sqrt(a^2 + b^2)
 #
 
@@ -213,6 +201,18 @@ sub pow {
 }
 
 #
+## sqrt(a + b*i) = exp(log(a + b*i) / 2)
+#
+
+sub sqrt {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->log->div($TWO)->exp;
+}
+
+#
 ## exp(a + b*i) = exp(a)*cos(b) + exp(a)*sin(b)*i
 #
 
@@ -239,6 +239,63 @@ sub sin {
     my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
 
     __PACKAGE__->new(($t1->{b} - $t2->{b}) / -2, ($t1->{a} - $t2->{a}) / 2);
+}
+
+#
+## asin(a + b*i) = -i*log(sqrt(1 - (a + b*i)^2) + i*a - b)
+#
+
+sub asin {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $r = __PACKAGE__->new(1 - ($x->{a} * $x->{a} - $x->{b} * $x->{b}), -($x->{a} * $x->{b} + $x->{b} * $x->{a}))->sqrt;
+
+    $r->{a} -= $x->{b};
+    $r->{b} += $x->{a};
+
+    $r = $r->log;
+    @{$r}{'a', 'b'} = ($r->{b}, -$r->{a});
+    $r;
+}
+
+#
+## sinh(a + b*i) = (exp(2 * (a + b*i)) - 1) / (2*exp(a + b*i))
+#
+
+sub sinh {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{a} * 2, $x->{b} * 2)->exp;
+
+    $t1->{a} -= 1;
+
+    my $t2 = $x->exp;
+
+    $t2->{a} *= 2;
+    $t2->{b} *= 2;
+
+    $t1->div($t2);
+}
+
+#
+## asinh(a + b*i) = log(sqrt((a + b*i)^2 + 1) + (a + b*i))
+#
+
+sub asinh {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $r = __PACKAGE__->new($x->{a} * $x->{a} - $x->{b} * $x->{b} + 1, $x->{a} * $x->{b} + $x->{b} * $x->{a})->sqrt;
+
+    $r->{a} += $x->{a};
+    $r->{b} += $x->{b};
+
+    $r->log;
 }
 
 #
