@@ -10,7 +10,7 @@ Version 0.01
 
 =head1 SYNOPSIS
 
-Math::GComplex provides a generic interface to complex number operations, accepting any type of number in its containers, including numerical objects provided by other mathematical libraries, such as L<Math::AnyNum>.
+Math::GComplex provides a generic interface to complex number operations, accepting any type of number as a component of a complex number, including numerical objects provided by other mathematical libraries, such as L<Math::AnyNum>.
 
     use 5.010;
     use Math::GComplex;
