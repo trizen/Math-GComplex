@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 123;
+plan tests => 137;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -142,6 +142,22 @@ is(join(' ', $y->asech->reals),            join(' ', (7 + 5 * i)->asech->reals))
 is(join(' ', $y->conj->asech->reals),      join(' ', (7 - 5 * i)->asech->reals));
 is(join(' ', $y->neg->conj->asech->reals), join(' ', (-7 + 5 * i)->asech->reals));
 
+is(join(' ', $y->csc->reals),            join(' ', (7 + 5 * i)->csc->reals));
+is(join(' ', $y->conj->csc->reals),      join(' ', (7 - 5 * i)->csc->reals));
+is(join(' ', $y->neg->conj->csc->reals), join(' ', (-7 + 5 * i)->csc->reals));
+
+is(join(' ', $y->csch->reals),            join(' ', (7 + 5 * i)->csch->reals));
+is(join(' ', $y->conj->csch->reals),      join(' ', (7 - 5 * i)->csch->reals));
+is(join(' ', $y->neg->conj->csch->reals), join(' ', (-7 + 5 * i)->csch->reals));
+
+is(join(' ', $y->acsc->reals),            join(' ', (7 + 5 * i)->acsc->reals));
+is(join(' ', $y->conj->acsc->reals),      join(' ', (7 - 5 * i)->acsc->reals));
+is(join(' ', $y->neg->conj->acsc->reals), join(' ', (-7 + 5 * i)->acsc->reals));
+
+is(join(' ', $y->acsch->reals),            join(' ', (7 + 5 * i)->acsch->reals));
+is(join(' ', $y->conj->acsch->reals),      join(' ', (7 - 5 * i)->acsch->reals));
+is(join(' ', $y->neg->conj->acsch->reals), join(' ', (-7 + 5 * i)->acsch->reals));
+
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(1 / 2,  0)->asin->reals), join(' ', (0.5)->asin->reals));
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(-1 / 2, 0)->asin->reals), join(' ', (-0.5)->asin->reals));
 
@@ -165,6 +181,9 @@ is(join(' ', Math::GComplex->new('1')->acos->reals), '0 0');
 
 is(join(' ', Math::GComplex->new(0)->sech->reals),   '1 0');
 is(join(' ', Math::GComplex->new('0')->sech->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(0)->tan->reals),   '0 0');
+is(join(' ', Math::GComplex->new('0')->tan->reals), '0 0');
 
 is(join(' ', Math::GComplex->new(0)->tanh->reals),   '0 0');
 is(join(' ', Math::GComplex->new('0')->tanh->reals), '0 0');

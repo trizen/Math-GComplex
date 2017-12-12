@@ -221,6 +221,10 @@ sub log {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
+    if ($x->{a} == 0 and $x->{b} == 0) {
+        return __PACKAGE__->new(-'inf', 0);
+    }
+
     __PACKAGE__->new(CORE::log($x->{a} * $x->{a} + $x->{b} * $x->{b}) / 2, CORE::atan2($x->{b}, $x->{a}));
 }
 
@@ -729,7 +733,77 @@ sub asech {
 #               CSC / CSCH / ACSC / ACSCH
 ########################################################################
 
-# to be added...
+#
+## csc(a + b*i) = -(2*i)/(exp(-i * (a + b*i)) - exp(i * (a + b*i)))
+#
+
+sub csc {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+
+    $t1->{a} -= $t2->{a};
+    $t1->{b} -= $t2->{b};
+
+    my $den = $t1->{a} * $t1->{a} + $t1->{b} * $t1->{b};
+
+    $t1->{a} *= -2;
+    $t1->{b} *= -2;
+
+    $t1->{a} /= $den;
+    $t1->{b} /= $den;
+
+    @{$t1}{'a', 'b'} = ($t1->{b}, $t1->{a});
+
+    $t1;
+}
+
+#
+## csch(a + b*i) = (2*exp(a + b*i)) / (exp(2 * (a + b*i)) - 1)
+#
+
+sub csch {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = $x->exp;
+    my $t2 = __PACKAGE__->new($x->{a} * 2, $x->{b} * 2)->exp;
+
+    $t1->{a} *= 2;
+    $t1->{b} *= 2;
+
+    $t2->{a} -= 1;
+
+    $t1->div($t2);
+}
+
+#
+## acsc(a + b*i) = asin(1/(a + b*i))
+#
+
+sub acsc {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->inv->asin;
+}
+
+#
+## acsch(a + b*i) = asinh(1/(a + b*i))
+#
+
+sub acsch {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->inv->asinh;
+}
 
 #
 ## reals(a + b*i) = (a, b)
