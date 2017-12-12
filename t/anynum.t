@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 167;
+plan tests => 172;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -208,6 +208,12 @@ is(join(' ', Math::GComplex->new('1')->asec->reals), '0 0');
 
 is(join(' ', Math::GComplex->new(1)->asech->reals),   '0 0');
 is(join(' ', Math::GComplex->new('1')->asech->reals), '0 0');
+
+is(join(' ', atan2($x, $y)->reals), join(' ', ($x / $y)->atan->reals));
+is(join(' ', atan2($x,      $y)->reals),      join(' ', atan2(3 + 4 * i,  7 + 5 * i)->reals));
+is(join(' ', atan2($x->neg, $y)->reals),      join(' ', atan2(-3 - 4 * i, 7 + 5 * i)->reals));
+is(join(' ', atan2($x,      $y->neg)->reals), join(' ', atan2(3 + 4 * i,  -7 - 5 * i)->reals));
+is(join(' ', atan2($x->neg, $y->neg)->reals), join(' ', atan2(-3 - 4 * i, -7 - 5 * i)->reals));
 
 is(join(' ', ($y % $x)->reals),                       '0 4');
 is(join(' ', ($y % $x->conj)->reals),                 '3 2');

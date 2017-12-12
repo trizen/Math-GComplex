@@ -96,18 +96,19 @@ use overload
         acsc  => \&acsc,
         acsch => \&acsch,
 
-        #atan2   => \&atan2,
+        atan2 => \&atan2,
+
         #deg2rad => \&deg2rad,
         #rad2deg => \&rad2deg,
                );
 
     my %special = (
-        exp  => sub (_) { goto &exp },     # built-in function
-        log  => sub (_) { goto &log },     # built-in function
-        sqrt => sub (_) { goto &sqrt },    # built-in function
-        cbrt => \&cbrt,
-        logn => \&logn,
-        root => \&root,
+                   exp  => sub (_) { goto &exp },     # built-in function
+                   log  => sub (_) { goto &log },     # built-in function
+                   sqrt => sub (_) { goto &sqrt },    # built-in function
+                   cbrt => \&cbrt,
+                   logn => \&logn,
+                   root => \&root,
                   );
 
     my %misc = (
@@ -731,6 +732,19 @@ sub atan {
     @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
 
     $t1;
+}
+
+#
+## atan2(x, y) = atan(x/y)
+#
+
+sub atan2 {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->div($y)->atan;
 }
 
 #
