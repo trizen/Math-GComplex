@@ -147,6 +147,20 @@ sub dec {
 }
 
 #
+## inv(a + b*i) = a/(a^2 + b^2) - i*b/(a^2 + b^2)
+#
+
+sub inv {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $den = $x->{a} * $x->{a} + $x->{b} * $x->{b};
+
+    __PACKAGE__->new($x->{a} / $den, -$x->{b} / $den);
+}
+
+#
 ## abs(a + b*i) = sqrt(a^2 + b^2)
 #
 
@@ -168,7 +182,7 @@ sub sgn {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     if ($x->{a} == 0 and $x->{b} == 0) {
-        return $ZERO;
+        return __PACKAGE__->new(0, 0);
     }
 
     $x->div($x->abs);
@@ -245,6 +259,10 @@ sub sqrt {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    if ($x->{a} == 0 and $x->{b} == 0) {
+        return __PACKAGE__->new(0, 0);
+    }
 
     my $r = $x->log;
 
@@ -637,9 +655,81 @@ sub acoth {
 #               SEC / SECH / ASEC / ASECH
 ########################################################################
 
+#
+## sec(a + b*i) = 2/(exp(-i*(a + b*i)) + exp(i*(a + b*i)))
+#
+
+sub sec {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+
+    $t1->{a} += $t2->{a};
+    $t1->{b} += $t2->{b};
+
+    my $den = $t1->{a} * $t1->{a} + $t1->{b} * $t1->{b};
+
+    $t1->{a} *= +2;
+    $t1->{b} *= -2;
+
+    $t1->{a} /= $den;
+    $t1->{b} /= $den;
+
+    $t1;
+}
+
+#
+## asec(a + b*i) = acos(1/(a + b*i))
+#
+
+sub asec {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->inv->acos;
+}
+
+#
+## sech(a + b*i) = (2 * exp(a + b*i)) / (exp(2 * (a + b*i)) + 1)
+#
+
+sub sech {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = $x->exp;
+    my $t2 = __PACKAGE__->new($x->{a} * 2, $x->{b} * 2)->exp;
+
+    $t1->{a} *= 2;
+    $t1->{b} *= 2;
+
+    $t2->{a} += 1;
+
+    $t1->div($t2);
+}
+
+#
+## asech(a + b*i) = acosh(1/(a + b*i))
+#
+
+sub asech {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->inv->acosh;
+}
+
 ########################################################################
 #               CSC / CSCH / ACSC / ACSCH
 ########################################################################
+
+# to be added...
 
 #
 ## reals(a + b*i) = (a, b)

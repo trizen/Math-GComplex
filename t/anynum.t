@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 85;
+plan tests => 123;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -95,36 +95,52 @@ is(join(' ', $y->conj->acos->reals),      join(' ', (7 - 5 * i)->acos->reals));
 is(join(' ', $y->neg->conj->acos->reals), join(' ', (-7 + 5 * i)->acos->reals));
 
 is(join(' ', $y->tan->reals),            join(' ', (7 + 5 * i)->tan->reals));
-is(join(' ', $y->tan->conj->reals),      join(' ', (7 - 5 * i)->tan->reals));
-is(join(' ', $y->tan->neg->conj->reals), join(' ', (-7 + 5 * i)->tan->reals));
+is(join(' ', $y->conj->tan->reals),      join(' ', (7 - 5 * i)->tan->reals));
+is(join(' ', $y->neg->conj->tan->reals), join(' ', (-7 + 5 * i)->tan->reals));
 
 is(join(' ', $y->tanh->reals),            join(' ', (7 + 5 * i)->tanh->reals));
-is(join(' ', $y->tanh->conj->reals),      join(' ', (7 - 5 * i)->tanh->reals));
-is(join(' ', $y->tanh->neg->conj->reals), join(' ', (-7 + 5 * i)->tanh->reals));
+is(join(' ', $y->conj->tanh->reals),      join(' ', (7 - 5 * i)->tanh->reals));
+is(join(' ', $y->neg->conj->tanh->reals), join(' ', (-7 + 5 * i)->tanh->reals));
 
 is(join(' ', $y->atanh->reals),            join(' ', (7 + 5 * i)->atanh->reals));
-is(join(' ', $y->atanh->conj->reals),      join(' ', (7 - 5 * i)->atanh->reals));
-is(join(' ', $y->atanh->neg->conj->reals), join(' ', (-7 + 5 * i)->atanh->reals));
+is(join(' ', $y->conj->atanh->reals),      join(' ', (7 - 5 * i)->atanh->reals));
+is(join(' ', $y->neg->conj->atanh->reals), join(' ', (-7 + 5 * i)->atanh->reals));
 
 is(join(' ', $y->atan->reals),            join(' ', (7 + 5 * i)->atan->reals));
 is(join(' ', $y->conj->atan->reals),      join(' ', (7 - 5 * i)->atan->reals));
 is(join(' ', $y->neg->conj->atan->reals), join(' ', (-7 + 5 * i)->atan->reals));
 
 is(join(' ', $y->cot->reals),            join(' ', (7 + 5 * i)->cot->reals));
-is(join(' ', $y->cot->conj->reals),      join(' ', (7 - 5 * i)->cot->reals));
-is(join(' ', $y->cot->neg->conj->reals), join(' ', (-7 + 5 * i)->cot->reals));
+is(join(' ', $y->conj->cot->reals),      join(' ', (7 - 5 * i)->cot->reals));
+is(join(' ', $y->neg->conj->cot->reals), join(' ', (-7 + 5 * i)->cot->reals));
 
 is(join(' ', $y->coth->reals),            join(' ', (7 + 5 * i)->coth->reals));
-is(join(' ', $y->coth->conj->reals),      join(' ', (7 - 5 * i)->coth->reals));
-is(join(' ', $y->coth->neg->conj->reals), join(' ', (-7 + 5 * i)->coth->reals));
+is(join(' ', $y->conj->coth->reals),      join(' ', (7 - 5 * i)->coth->reals));
+is(join(' ', $y->neg->conj->coth->reals), join(' ', (-7 + 5 * i)->coth->reals));
 
 is(join(' ', $y->acot->reals),            join(' ', (7 + 5 * i)->acot->reals));
-is(join(' ', $y->acot->conj->reals),      join(' ', (7 - 5 * i)->acot->reals));
-is(join(' ', $y->acot->neg->conj->reals), join(' ', (-7 + 5 * i)->acot->reals));
+is(join(' ', $y->conj->acot->reals),      join(' ', (7 - 5 * i)->acot->reals));
+is(join(' ', $y->neg->conj->acot->reals), join(' ', (-7 + 5 * i)->acot->reals));
 
 is(join(' ', $y->acoth->reals),            join(' ', (7 + 5 * i)->acoth->reals));
-is(join(' ', $y->acoth->conj->reals),      join(' ', (7 - 5 * i)->acoth->reals));
-is(join(' ', $y->acoth->neg->conj->reals), join(' ', (-7 + 5 * i)->acoth->reals));
+is(join(' ', $y->conj->acoth->reals),      join(' ', (7 - 5 * i)->acoth->reals));
+is(join(' ', $y->neg->conj->acoth->reals), join(' ', (-7 + 5 * i)->acoth->reals));
+
+is(join(' ', $y->sec->reals),            join(' ', (7 + 5 * i)->sec->reals));
+is(join(' ', $y->conj->sec->reals),      join(' ', (7 - 5 * i)->sec->reals));
+is(join(' ', $y->neg->conj->sec->reals), join(' ', (-7 + 5 * i)->sec->reals));
+
+is(join(' ', $y->sech->reals),            join(' ', (7 + 5 * i)->sech->reals));
+is(join(' ', $y->conj->sech->reals),      join(' ', (7 - 5 * i)->sech->reals));
+is(join(' ', $y->neg->conj->sech->reals), join(' ', (-7 + 5 * i)->sech->reals));
+
+is(join(' ', $y->asec->reals),            join(' ', (7 + 5 * i)->asec->reals));
+is(join(' ', $y->conj->asec->reals),      join(' ', (7 - 5 * i)->asec->reals));
+is(join(' ', $y->neg->conj->asec->reals), join(' ', (-7 + 5 * i)->asec->reals));
+
+is(join(' ', $y->asech->reals),            join(' ', (7 + 5 * i)->asech->reals));
+is(join(' ', $y->conj->asech->reals),      join(' ', (7 - 5 * i)->asech->reals));
+is(join(' ', $y->neg->conj->asech->reals), join(' ', (-7 + 5 * i)->asech->reals));
 
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(1 / 2,  0)->asin->reals), join(' ', (0.5)->asin->reals));
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(-1 / 2, 0)->asin->reals), join(' ', (-0.5)->asin->reals));
@@ -132,5 +148,44 @@ is(join(' ', map { $_->round(-50) } Math::GComplex->new(-1 / 2, 0)->asin->reals)
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(0, 1 / 2)->asin->reals),  join(' ', (0.5 * i)->asin->reals));
 is(join(' ', map { $_->round(-50) } Math::GComplex->new(0, -1 / 2)->asin->reals), join(' ', (-0.5 * i)->asin->reals));
 
+is(join(' ', Math::GComplex->new(1)->sqrt->reals),   '1 0');
+is(join(' ', Math::GComplex->new('1')->sqrt->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(0)->sqrt->reals),   '0 0');
+is(join(' ', Math::GComplex->new('0')->sqrt->reals), '0 0');
+
 is(join(' ', Math::GComplex->new(0)->atan->reals),   '0 0');
 is(join(' ', Math::GComplex->new('0')->atan->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(0)->asin->reals),   '0 0');
+is(join(' ', Math::GComplex->new('0')->asin->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(1)->acos->reals),   '0 0');
+is(join(' ', Math::GComplex->new('1')->acos->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(0)->sech->reals),   '1 0');
+is(join(' ', Math::GComplex->new('0')->sech->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(0)->tanh->reals),   '0 0');
+is(join(' ', Math::GComplex->new('0')->tanh->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(0)->cosh->reals),   '1 0');
+is(join(' ', Math::GComplex->new('0')->cosh->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(0)->cos->reals),   '1 0');
+is(join(' ', Math::GComplex->new('0')->cos->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(0)->sin->reals),   '0 0');
+is(join(' ', Math::GComplex->new('0')->sin->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(1)->log->reals),   '0 0');
+is(join(' ', Math::GComplex->new('1')->log->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(0)->sec->reals),   '1 0');
+is(join(' ', Math::GComplex->new('0')->sec->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(1)->asec->reals),   '0 0');
+is(join(' ', Math::GComplex->new('1')->asec->reals), '0 0');
+
+is(join(' ', Math::GComplex->new(1)->asech->reals),   '0 0');
+is(join(' ', Math::GComplex->new('1')->asech->reals), '0 0');
