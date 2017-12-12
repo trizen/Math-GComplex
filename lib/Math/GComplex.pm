@@ -391,8 +391,8 @@ sub sin {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
-    my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+    my $t1 = __PACKAGE__->new(+$x->{b}, -$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(-$x->{b}, +$x->{a})->exp;
 
     $t1->{a} -= $t2->{a};
     $t1->{b} -= $t2->{b};
@@ -475,8 +475,8 @@ sub cos {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
-    my $t2 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
+    my $t1 = __PACKAGE__->new(-$x->{b}, +$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(+$x->{b}, -$x->{a})->exp;
 
     $t1->{a} += $t2->{a};
     $t1->{b} += $t2->{b};
@@ -518,7 +518,7 @@ sub acos {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     my $t1 = __PACKAGE__->new((1 - $x->{a}) / 2, $x->{b} / -2)->sqrt;
-    my $t2 = __PACKAGE__->new((1 + $x->{a}) / 2, $x->{b} / 2)->sqrt;
+    my $t2 = __PACKAGE__->new((1 + $x->{a}) / 2, $x->{b} / +2)->sqrt;
 
     @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
 
@@ -613,8 +613,8 @@ sub atan {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new($x->{b} + 1,  -$x->{a})->log;
-    my $t2 = __PACKAGE__->new(-$x->{b} + 1, $x->{a})->log;
+    my $t1 = __PACKAGE__->new(+$x->{b} + 1, -$x->{a})->log;
+    my $t2 = __PACKAGE__->new(-$x->{b} + 1, +$x->{a})->log;
 
     $t1->{a} -= $t2->{a};
     $t1->{b} -= $t2->{b};
@@ -636,7 +636,7 @@ sub atanh {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new($x->{a} + 1, $x->{b})->log;
+    my $t1 = __PACKAGE__->new(1 + $x->{a}, +$x->{b})->log;
     my $t2 = __PACKAGE__->new(1 - $x->{a}, -$x->{b})->log;
 
     $t1->{a} -= $t2->{a};
@@ -706,10 +706,10 @@ sub acot {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new(-$x->{b},     $x->{a})->log;
-    my $t2 = __PACKAGE__->new($x->{b},      -$x->{a})->log;
-    my $t3 = __PACKAGE__->new($x->{b} - 1,  -$x->{a})->log;
-    my $t4 = __PACKAGE__->new(-$x->{b} - 1, $x->{a})->log;
+    my $t1 = __PACKAGE__->new(-$x->{b},     +$x->{a})->log;
+    my $t2 = __PACKAGE__->new(+$x->{b},     -$x->{a})->log;
+    my $t3 = __PACKAGE__->new(+$x->{b} - 1, -$x->{a})->log;
+    my $t4 = __PACKAGE__->new(-$x->{b} - 1, +$x->{a})->log;
 
     $t1->{a} -= $t2->{a};
     $t1->{b} -= $t2->{b};
@@ -738,7 +738,7 @@ sub acoth {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     my $t1 = __PACKAGE__->new(-$x->{a} - 1, -$x->{b})->log;
-    my $t2 = __PACKAGE__->new($x->{a} - 1,  $x->{b})->log;
+    my $t2 = __PACKAGE__->new(+$x->{a} - 1, +$x->{b})->log;
     my $t3 = __PACKAGE__->new(-$x->{a},     -$x->{b})->log;
     my $t4 = $x->log;
 
@@ -770,8 +770,8 @@ sub sec {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
-    my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+    my $t1 = __PACKAGE__->new(+$x->{b}, -$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(-$x->{b}, +$x->{a})->exp;
 
     $t1->{a} += $t2->{a};
     $t1->{b} += $t2->{b};
@@ -844,8 +844,8 @@ sub csc {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new($x->{b},  -$x->{a})->exp;
-    my $t2 = __PACKAGE__->new(-$x->{b}, $x->{a})->exp;
+    my $t1 = __PACKAGE__->new(+$x->{b}, -$x->{a})->exp;
+    my $t2 = __PACKAGE__->new(-$x->{b}, +$x->{a})->exp;
 
     $t1->{a} -= $t2->{a};
     $t1->{b} -= $t2->{b};
