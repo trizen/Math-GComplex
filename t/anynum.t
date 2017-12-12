@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 137;
+plan tests => 163;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -208,3 +208,32 @@ is(join(' ', Math::GComplex->new('1')->asec->reals), '0 0');
 
 is(join(' ', Math::GComplex->new(1)->asech->reals),   '0 0');
 is(join(' ', Math::GComplex->new('1')->asech->reals), '0 0');
+
+is(join(' ', ($y % $x)->reals),                       '0 4');
+is(join(' ', ($y % $x->conj)->reals),                 '3 2');
+is(join(' ', ($y % $x->neg)->reals),                  '1 -3');
+is(join(' ', ($y->neg % $x->neg)->reals),             '0 -4');
+is(join(' ', ($y->neg % $x)->reals),                  '-1 3');
+is(join(' ', ($y->neg % $x->conj)->reals),            '4 -3');
+is(join(' ', ($y->conj % $x->conj)->reals),           '4 -1');
+is(join(' ', ($y->conj % $x->neg->conj)->reals),      '-3 0');
+is(join(' ', ($y->neg->conj % $x->neg->conj)->reals), '-4 1');
+is(join(' ', ($y->neg->conj % $x->conj)->reals),      '3 0');
+
+is(join(' ', Math::GComplex->new(13.7)->floor->reals),  '13 0');
+is(join(' ', Math::GComplex->new(-13.7)->floor->reals), '-14 0');
+is(join(' ', Math::GComplex->new(-13.7, 15.3)->floor->reals),  '-14 15');
+is(join(' ', Math::GComplex->new(-13.7, -15.3)->floor->reals), '-14 -16');
+is(join(' ', Math::GComplex->new(13.7,  -15.3)->floor->reals), '13 -16');
+is(join(' ', Math::GComplex->new(13.7,  -15.9)->floor->reals), '13 -16');
+is(join(' ', Math::GComplex->new(13.3,  -15.9)->floor->reals), '13 -16');
+is(join(' ', Math::GComplex->new(-13.3, -15.9)->floor->reals), '-14 -16');
+
+is(join(' ', Math::GComplex->new(13.7)->ceil->reals),  '14 0');
+is(join(' ', Math::GComplex->new(-13.7)->ceil->reals), '-13 0');
+is(join(' ', Math::GComplex->new(-13.7, 15.3)->ceil->reals),  '-13 16');
+is(join(' ', Math::GComplex->new(-13.7, -15.3)->ceil->reals), '-13 -15');
+is(join(' ', Math::GComplex->new(13.7,  -15.3)->ceil->reals), '14 -15');
+is(join(' ', Math::GComplex->new(13.7,  -15.9)->ceil->reals), '14 -15');
+is(join(' ', Math::GComplex->new(13.3,  -15.9)->ceil->reals), '14 -15');
+is(join(' ', Math::GComplex->new(-13.3, -15.9)->ceil->reals), '-13 -15');

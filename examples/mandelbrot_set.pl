@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use lib qw(../lib);
-use Math::GComplex;
+use Math::GComplex qw(i);
 
 sub mandelbrot {
     my ($z, $c) = @_[0, 0];
@@ -13,7 +13,7 @@ sub mandelbrot {
 
 for (my $y = 1 ; $y >= -1 ; $y -= 0.05) {
     for (my $x = -2 ; $x <= 0.5 ; $x += 0.0315) {
-        print mandelbrot(Math::GComplex->new($x, $y)) ? ' ' : '#';
+        print mandelbrot($x + $y * i) ? ' ' : '#';
     }
     print "\n";
 }

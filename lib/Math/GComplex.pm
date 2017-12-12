@@ -62,8 +62,8 @@ use overload
 {
 
     my %const = (    # prototypes are assigned in import()
-
-    );
+                  i => \&i,
+                );
 
     my %trig = (
         sin => sub (_) { goto &sin },    # built-in function
@@ -143,7 +143,7 @@ use overload
                 no strict 'refs';
                 no warnings 'redefine';
                 my $caller_sub = $caller . '::' . $name;
-                *$caller_sub = $trig{$name} // $misc{$name} // $special{$name} // $const{$name};
+                *$caller_sub = $trig{$name} // $misc{$name} // $special{$name};
             }
             elsif ($name eq ':trig') {
                 push @_, keys(%trig);
@@ -172,6 +172,14 @@ sub new {
            a => $x // 0,
            b => $y // 0,
           }, $class;
+}
+
+#
+## i = sqrt(-1)
+#
+
+sub i {
+    __PACKAGE__->new(0, 1);
 }
 
 #
@@ -380,6 +388,54 @@ sub sqrt {
     $r->{b} /= 2;
 
     $r->exp;
+}
+
+#
+## floor(a + b*i) = floor(a) + floor(b)*i
+#
+
+sub floor {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = CORE::int($x->{a});
+    $t1 -= 1 if ($x->{a} < 0);
+
+    my $t2 = CORE::int($x->{b});
+    $t2 -= 1 if ($x->{b} < 0);
+
+    __PACKAGE__->new($t1, $t2);
+}
+
+#
+## floor(a + b*i) = -floor(-(a + b*i))
+#
+
+sub ceil {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t = $x->neg->floor;
+
+    $t->{a} = -$t->{a};
+    $t->{b} = -$t->{b};
+
+    $t;
+}
+
+#
+## mod(x, y) = x - y*floor(x/y)
+#
+
+sub mod {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->sub($x->div($y)->floor->mul($y));
 }
 
 ########################################################################
