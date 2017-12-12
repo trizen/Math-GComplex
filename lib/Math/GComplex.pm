@@ -26,7 +26,7 @@ use overload
   '&' => \&and,
   '|' => \&or,
   '^' => \&xor,
-  '~' => \&not,
+  '~' => \&conj,
 
   '>'  => sub { $_[2] ? (goto &lt) : (goto &gt) },
   '>=' => sub { $_[2] ? (goto &le) : (goto &ge) },
@@ -102,9 +102,12 @@ use overload
                );
 
     my %special = (
-                   exp  => sub (_) { goto &exp },     # built-in function
-                   log  => sub (_) { goto &log },     # built-in function
-                   sqrt => sub (_) { goto &sqrt },    # built-in function
+        exp  => sub (_) { goto &exp },     # built-in function
+        log  => sub (_) { goto &log },     # built-in function
+        sqrt => sub (_) { goto &sqrt },    # built-in function
+        cbrt => \&cbrt,
+        logn => \&logn,
+        root => \&root,
                   );
 
     my %misc = (
@@ -335,11 +338,20 @@ sub log {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    if ($x->{a} == 0 and $x->{b} == 0) {
-        return __PACKAGE__->new(-'inf', 0);
-    }
-
     __PACKAGE__->new(CORE::log($x->{a} * $x->{a} + $x->{b} * $x->{b}) / 2, CORE::atan2($x->{b}, $x->{a}));
+}
+
+#
+## logn(x, n) = log(x) / log(n)
+#
+
+sub logn {
+    my ($x, $n) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $n = __PACKAGE__->new($n) if ref($n) ne __PACKAGE__;
+
+    $x->log->div($n->log);
 }
 
 #
@@ -370,6 +382,19 @@ sub pow {
 }
 
 #
+## root(a + b*i, x) = (a + b*i)^(1/x)
+#
+
+sub root {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->pow($y->inv);
+}
+
+#
 ## sqrt(a + b*i) = exp(log(a + b*i) / 2)
 #
 
@@ -386,6 +411,27 @@ sub sqrt {
 
     $r->{a} /= 2;
     $r->{b} /= 2;
+
+    $r->exp;
+}
+
+#
+## cbrt(a + b*i) = exp(log(a + b*i) / 3)
+#
+
+sub cbrt {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    if ($x->{a} == 0 and $x->{b} == 0) {
+        return __PACKAGE__->new(0, 0);
+    }
+
+    my $r = $x->log;
+
+    $r->{a} /= 3;
+    $r->{b} /= 3;
 
     $r->exp;
 }
@@ -409,7 +455,7 @@ sub floor {
 }
 
 #
-## floor(a + b*i) = -floor(-(a + b*i))
+## ceil(a + b*i) = -floor(-(a + b*i))
 #
 
 sub ceil {
@@ -758,7 +804,7 @@ sub coth {
 }
 
 #
-## acot(a + b*i) = i * (log(i * (a + b*i)) - log(-(i * (a + b*i))) + log(-1 - i*(a + b*i)) - log(-1 + i*(a + b*i))) / 2
+## acot(a + b*i) = atan(1/(a + b*i))
 #
 
 sub acot {
@@ -766,30 +812,11 @@ sub acot {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new(-$x->{b},     +$x->{a})->log;
-    my $t2 = __PACKAGE__->new(+$x->{b},     -$x->{a})->log;
-    my $t3 = __PACKAGE__->new(+$x->{b} - 1, -$x->{a})->log;
-    my $t4 = __PACKAGE__->new(-$x->{b} - 1, +$x->{a})->log;
-
-    $t1->{a} -= $t2->{a};
-    $t1->{b} -= $t2->{b};
-
-    $t1->{a} += $t3->{a};
-    $t1->{b} += $t3->{b};
-
-    $t1->{a} -= $t4->{a};
-    $t1->{b} -= $t4->{b};
-
-    $t1->{a} /= 2;
-    $t1->{b} /= 2;
-
-    @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
-
-    $t1;
+    $x->inv->atan;
 }
 
 #
-## acoth(a + b*i) = (log(-1 - (a + b*i)) - log(-1 + (a + b*i)) - log(-(a + b*i)) + log(a + b*i)) / 2
+## acoth(a + b*i) = atanh(1 / (a + b*i))
 #
 
 sub acoth {
@@ -797,24 +824,7 @@ sub acoth {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t1 = __PACKAGE__->new(-$x->{a} - 1, -$x->{b})->log;
-    my $t2 = __PACKAGE__->new(+$x->{a} - 1, +$x->{b})->log;
-    my $t3 = __PACKAGE__->new(-$x->{a},     -$x->{b})->log;
-    my $t4 = $x->log;
-
-    $t1->{a} -= $t2->{a};
-    $t1->{b} -= $t2->{b};
-
-    $t1->{a} -= $t3->{a};
-    $t1->{b} -= $t3->{b};
-
-    $t1->{a} += $t4->{a};
-    $t1->{b} += $t4->{b};
-
-    $t1->{a} /= 2;
-    $t1->{b} /= 2;
-
-    $t1;
+    $x->inv->atanh;
 }
 
 ########################################################################
@@ -1086,7 +1096,7 @@ sub stringify {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    "($x->{a} $x->{b})";
+    "[$x->{a}, $x->{b}]";
 }
 
 sub boolify {

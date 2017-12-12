@@ -8,9 +8,9 @@ use Test::More;
 ## Tests from Math::Complex / Math::Trig
 ## https://metacpan.org/source/ZEFRAM/Math-Complex-1.59/t/Trig.t
 
-use Math::GComplex qw(:trig);
+use Math::GComplex qw(:trig :special i);
 
-plan tests => 56;
+plan tests => 140;
 
 my $eps = 1e-10;
 
@@ -112,3 +112,69 @@ ok(near(acos(2.0)->real, 0));
 ok(asin(-0.5)->real == asin(-0.5));
 ok(asin(0.0)->real == asin(0.0));
 ok(asin(0.5)->real == asin(0.5));
+
+for my $iter (1 .. 3) {
+
+    my $z = Math::GComplex->new(rand(5), rand(5));
+    my $n = Math::GComplex->new(rand(5), rand(5));
+
+    if ($iter == 2) {
+        eval { require Math::AnyNum; };
+
+        if (!$@) {
+            $z->{a} = Math::AnyNum::rand(5);
+            $z->{b} = Math::AnyNum::rand(5);
+
+            $n->{a} = Math::AnyNum::rand(5);
+            $n->{b} = Math::AnyNum::rand(5);
+        }
+    }
+
+    if (rand(1) < 0.5) {
+        $z->{a} = -$z->{a};
+    }
+
+    if (rand(1) < 0.5) {
+        $z->{b} = -$z->{a};
+    }
+
+    ok(near(cbrt($z), $z**(1 / 3)));
+    ok(near(cbrt($z), root($z, 3)));
+
+    ok(near(logn($z, $n), log($z) / log($n)));
+
+    ok(near(tan($z), sin($z) / cos($z)));
+
+    ok(near(csc($z), 1 / sin($z)));
+    ok(near(sec($z), 1 / cos($z)));
+
+    ok(near(cot($z), 1 / tan($z)));
+
+    ok(near(asin($z), -i * log(i * $z + sqrt(1 - $z**2))));
+    ok(near(acos($z), -i * log($z + i * sqrt(1 - $z**2))));
+
+    ok(near(atan($z), i / 2 * log((i + $z) / (i- $z))));
+
+    ok(near(acsc($z), asin(1 / $z)));
+    ok(near(asec($z), acos(1 / $z)));
+    ok(near(acot($z), atan(1 / $z)));
+    ok(near(acot($z), -i / 2 * log((i + $z) / ($z -i))));
+
+    ok(near(sinh($z), 1 / 2 * (exp($z) - exp(-$z))));
+    ok(near(cosh($z), 1 / 2 * (exp($z) + exp(-$z))));
+    ok(near(tanh($z), sinh($z) / cosh($z)));
+    ok(near(tanh($z), (exp($z) - exp(-$z)) / (exp($z) + exp(-$z))));
+
+    ok(near(csch($z), 1 / sinh($z)));
+    ok(near(sech($z), 1 / cosh($z)));
+    ok(near(coth($z), 1 / tanh($z)));
+
+    ok(near(asinh($z), log($z + sqrt($z**2 + 1))));
+    ok(near(acosh($z), log($z + sqrt($z - 1) * sqrt($z + 1))));
+    ok(near(atanh($z), 1 / 2 * log((1 + $z) / (1 - $z))));
+
+    ok(near(acsch($z), asinh(1 / $z)));
+    ok(near(asech($z), acosh(1 / $z)));
+    ok(near(acoth($z), atanh(1 / $z)));
+    ok(near(acoth($z), 1 / 2 * log((1 + $z) / ($z - 1))));
+}

@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 163;
+plan tests => 167;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -219,6 +219,11 @@ is(join(' ', ($y->conj % $x->conj)->reals),           '4 -1');
 is(join(' ', ($y->conj % $x->neg->conj)->reals),      '-3 0');
 is(join(' ', ($y->neg->conj % $x->neg->conj)->reals), '-4 1');
 is(join(' ', ($y->neg->conj % $x->conj)->reals),      '3 0');
+
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(1e5)->sech->reals), '0 0');
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(1e5)->csch->reals), '0 0');
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(1e5)->tanh->reals), '1 0');
+is(join(' ', map { $_->round(-50) } Math::GComplex->new(1e5)->coth->reals), '1 0');
 
 is(join(' ', Math::GComplex->new(13.7)->floor->reals),  '13 0');
 is(join(' ', Math::GComplex->new(-13.7)->floor->reals), '-14 0');
