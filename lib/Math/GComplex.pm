@@ -109,9 +109,11 @@ use overload
 
     my %misc = (
 
-        inv => \&inv,
-        sgn => \&sgn,
         abs => sub (_) { goto &abs },      # built-in function
+
+        inv  => \&inv,
+        sgn  => \&sgn,
+        conj => \&conj,
 
         real => \&real,
         imag => \&imag,
@@ -135,7 +137,9 @@ use overload
                 my $value      = $sub->();
                 *$caller_sub = sub() { $value }
             }
-            elsif (exists($trig{$name})) {
+            elsif (   exists($trig{$name})
+                   or exists($special{$name})
+                   or exists($misc{$name})) {
                 no strict 'refs';
                 no warnings 'redefine';
                 my $caller_sub = $caller . '::' . $name;
