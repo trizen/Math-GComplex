@@ -59,6 +59,108 @@ use overload
   abs  => \&abs,
   sqrt => \&sqrt;
 
+{
+
+    my %const = (    # prototypes are assigned in import()
+
+    );
+
+    my %trig = (
+        sin => sub (_) { goto &sin },    # built-in function
+        sinh  => \&sinh,
+        asin  => \&asin,
+        asinh => \&asinh,
+
+        cos => sub (_) { goto &cos },    # built-in function
+        cosh  => \&cosh,
+        acos  => \&acos,
+        acosh => \&acosh,
+
+        tan   => \&tan,
+        tanh  => \&tanh,
+        atan  => \&atan,
+        atanh => \&atanh,
+
+        cot   => \&cot,
+        coth  => \&coth,
+        acot  => \&acot,
+        acoth => \&acoth,
+
+        sec   => \&sec,
+        sech  => \&sech,
+        asec  => \&asec,
+        asech => \&asech,
+
+        csc   => \&csc,
+        csch  => \&csch,
+        acsc  => \&acsc,
+        acsch => \&acsch,
+
+        #atan2   => \&atan2,
+        #deg2rad => \&deg2rad,
+        #rad2deg => \&rad2deg,
+               );
+
+    my %special = (
+                   exp  => sub (_) { goto &exp },     # built-in function
+                   log  => sub (_) { goto &log },     # built-in function
+                   sqrt => sub (_) { goto &sqrt },    # built-in function
+                  );
+
+    my %misc = (
+
+        inv => \&inv,
+        sgn => \&sgn,
+        abs => sub (_) { goto &abs },      # built-in function
+
+        real => \&real,
+        imag => \&imag,
+
+        reals => \&reals,
+    );
+
+    sub import {
+        shift;
+
+        my $caller = caller(0);
+
+        while (@_) {
+            my $name = shift(@_);
+
+            if (exists $const{$name}) {
+                no strict 'refs';
+                no warnings 'redefine';
+                my $caller_sub = $caller . '::' . $name;
+                my $sub        = $const{$name};
+                my $value      = $sub->();
+                *$caller_sub = sub() { $value }
+            }
+            elsif (exists($trig{$name})) {
+                no strict 'refs';
+                no warnings 'redefine';
+                my $caller_sub = $caller . '::' . $name;
+                *$caller_sub = $trig{$name} // $misc{$name} // $special{$name} // $const{$name};
+            }
+            elsif ($name eq ':trig') {
+                push @_, keys(%trig);
+            }
+            elsif ($name eq ':misc') {
+                push @_, keys(%misc);
+            }
+            elsif ($name eq ':special') {
+                push @_, keys(%special);
+            }
+            elsif ($name eq ':all') {
+                push @_, keys(%trig), keys(%special), keys(%misc);
+            }
+            else {
+                die "unknown import: <<$name>>";
+            }
+        }
+        return;
+    }
+}
+
 sub new {
     my ($class, $x, $y) = @_;
 
@@ -806,6 +908,30 @@ sub acsch {
 }
 
 #
+## real(a + b*i) = a
+#
+
+sub real {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->{a};
+}
+
+#
+## imag(a + b*i) = b
+#
+
+sub imag {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->{b};
+}
+
+#
 ## reals(a + b*i) = (a, b)
 #
 
@@ -901,6 +1027,14 @@ sub stringify {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     "($x->{a} $x->{b})";
+}
+
+sub boolify {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    !!$x->{a} or !!$x->{b};
 }
 
 sub numify {
