@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+# ASCII generation of the Mandelbrot set.
+
+# See also:
+#   https://en.wikipedia.org/wiki/Mandelbrot_set
+
 use lib qw(../lib);
 use Math::GComplex qw(i);
 

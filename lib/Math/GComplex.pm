@@ -438,6 +438,21 @@ sub cbrt {
 }
 
 #
+## int(a + b*i) = int(a) + int(b)*i
+#
+
+sub int {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t1 = CORE::int($x->{a});
+    my $t2 = CORE::int($x->{b});
+
+    __PACKAGE__->new($t1, $t2);
+}
+
+#
 ## floor(a + b*i) = floor(a) + floor(b)*i
 #
 
