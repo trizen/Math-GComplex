@@ -339,7 +339,13 @@ sub log {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    __PACKAGE__->new(CORE::log($x->{a} * $x->{a} + $x->{b} * $x->{b}) / 2, CORE::atan2($x->{b}, $x->{a}));
+    my $t = $x->{a} * $x->{a} + $x->{b} * $x->{b};
+
+    if ($t == 0) {
+        return __PACKAGE__->new(-'inf', 0);
+    }
+
+    __PACKAGE__->new(CORE::log($t) / 2, CORE::atan2($x->{b}, $x->{a}));
 }
 
 #
@@ -403,10 +409,6 @@ sub sqrt {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
-
-    if ($x->{a} == 0 and $x->{b} == 0) {
-        return __PACKAGE__->new(0, 0);
-    }
 
     my $r = $x->log;
 
@@ -1125,7 +1127,7 @@ sub stringify {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    "[$x->{a}, $x->{b}]";
+    "($x->{a} $x->{b})";
 }
 
 sub boolify {
