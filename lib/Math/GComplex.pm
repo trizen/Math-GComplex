@@ -341,7 +341,7 @@ sub log {
 
     my $t = $x->{a} * $x->{a} + $x->{b} * $x->{b};
 
-    if ($t == 0) {
+    if (!ref($t) and $t == 0) {
         return __PACKAGE__->new(-'inf', 0);
     }
 
