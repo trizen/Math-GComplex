@@ -1,5 +1,9 @@
 Revision history for Math-GComplex
 
+0.02    2018-01-01
+
+        - Removed some non-portable tests.
+
 0.01    2018-01-01
 
         - First release.

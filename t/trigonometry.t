@@ -10,7 +10,7 @@ use Test::More;
 
 use Math::GComplex qw(:trig :special i);
 
-plan tests => 140;
+plan tests => 130;
 
 my $eps = 1e-10;
 
@@ -99,19 +99,19 @@ cmp_ok(csch(-1e5), '==', 0);
 cmp_ok(tanh(-1e5), '==', -1);
 cmp_ok(coth(-1e5), '==', -1);
 
-print "# asin_real, acos_real\n";
+#~ print "# asin_real, acos_real\n";
 
-ok(acos(-2.0)->real == 4 * atan2(4, 4));
-ok(acos(-1.0)->real == 4 * atan2(4, 4));
-ok(acos(-0.5)->real == acos(-0.5));
-ok(acos(0.0)->real == 2 * atan2(4, 4));
-ok(acos(0.5)->real == acos(0.5));
-ok(acos(1.0)->real == 0);
-ok(near(acos(2.0)->real, 0));
+#~ ok(acos(-2.0)->real == 4 * atan2(4, 4));
+#~ ok(acos(-1.0)->real == 4 * atan2(4, 4));
+#~ ok(acos(-0.5)->real == acos(-0.5));
+#~ ok(acos(0.0)->real == 2 * atan2(4, 4));
+#~ ok(acos(0.5)->real == acos(0.5));
+#~ ok(acos(1.0)->real == 0);
+#~ ok(near(acos(2.0)->real, 0));
 
-ok(asin(-0.5)->real == asin(-0.5));
-ok(asin(0.0)->real == asin(0.0));
-ok(asin(0.5)->real == asin(0.5));
+#~ ok(asin(-0.5)->real == asin(-0.5));
+#~ ok(asin(0.0)->real == asin(0.0));
+#~ ok(asin(0.5)->real == asin(0.5));
 
 for my $iter (1 .. 3) {
 
