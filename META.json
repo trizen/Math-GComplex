@@ -1,7 +1,7 @@
 {
    "abstract" : "Generic complex number library.",
    "author" : [
-      "Daniel \"Trizen\" Șuteu <trizen@protonmail.com>"
+      "Daniel Șuteu <trizen@protonmail.com>"
    ],
    "dynamic_config" : 1,
    "generated_by" : "Module::Build version 0.4224",
@@ -53,5 +53,5 @@
       }
    },
    "version" : "0.01",
-   "x_serialization_backend" : "JSON::PP version 2.97000"
+   "x_serialization_backend" : "JSON::PP version 2.97001"
 }

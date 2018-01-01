@@ -23,9 +23,6 @@ use overload
   '==' => \&eq,
   '!=' => \&ne,
 
-  '&' => \&and,
-  '|' => \&or,
-  '^' => \&xor,
   '~' => \&conj,
 
   '>'  => sub { $_[2] ? (goto &lt) : (goto &gt) },
@@ -35,10 +32,8 @@ use overload
 
   '<=>' => sub { $_[2] ? -(&cmp($_[0], $_[1]) // return undef) : &cmp($_[0], $_[1]) },
 
-  '>>' => sub { @_ = ($_[1], $_[0]) if $_[2]; goto &rsft },
-  '<<' => sub { @_ = ($_[1], $_[0]) if $_[2]; goto &lsft },
-  '/'  => sub { @_ = ($_[1], $_[0]) if $_[2]; goto &div },
-  '-'  => sub { @_ = ($_[1], $_[0]) if $_[2]; goto &sub },
+  '/' => sub { @_ = ($_[1], $_[0]) if $_[2]; goto &div },
+  '-' => sub { @_ = ($_[1], $_[0]) if $_[2]; goto &sub },
 
   '**' => sub { @_ = $_[2] ? @_[1, 0] : @_[0, 1]; goto &pow },
   '%'  => sub { @_ = $_[2] ? @_[1, 0] : @_[0, 1]; goto &mod },
@@ -113,6 +108,9 @@ use overload
 
     my %misc = (
 
+        acmp => \&acmp,
+        cplx => \&cplx,
+
         abs => sub (_) { goto &abs },      # built-in function
 
         inv  => \&inv,
@@ -133,7 +131,22 @@ use overload
         while (@_) {
             my $name = shift(@_);
 
-            if (exists $const{$name}) {
+            if ($name eq ':overload') {
+                overload::constant
+                  integer => sub { __PACKAGE__->new($_[0],      0) },
+                  float   => sub { __PACKAGE__->new($_[0],      0) },
+                  binary  => sub { __PACKAGE__->new(oct($_[0]), 0) };
+
+                # Export the 'i' constant
+                foreach my $pair (['i', i()]) {
+                    my $sub = $caller . '::' . $pair->[0];
+                    no strict 'refs';
+                    no warnings 'redefine';
+                    my $value = $pair->[1];
+                    *$sub = sub () { $value };
+                }
+            }
+            elsif (exists $const{$name}) {
                 no strict 'refs';
                 no warnings 'redefine';
                 my $caller_sub = $caller . '::' . $name;
@@ -159,13 +172,17 @@ use overload
                 push @_, keys(%special);
             }
             elsif ($name eq ':all') {
-                push @_, keys(%trig), keys(%special), keys(%misc);
+                push @_, keys(%const), keys(%trig), keys(%special), keys(%misc);
             }
             else {
                 die "unknown import: <<$name>>";
             }
         }
         return;
+    }
+
+    sub unimport {
+        overload::remove_constant('binary', '', 'float', '', 'integer');
     }
 }
 
@@ -184,6 +201,15 @@ sub new {
 
 sub i {
     __PACKAGE__->new(0, 1);
+}
+
+#
+## cplx(a, b) = a + b*i
+#
+
+sub cplx {
+    my ($x, $y) = @_;
+    __PACKAGE__->new($x, $y);
 }
 
 #
@@ -241,27 +267,16 @@ sub div {
 }
 
 #
-## inc(a + b*i) = a+1 + b*i
+## mod(x, y) = x - y*floor(x/y)
 #
 
-sub inc {
-    my ($x) = @_;
+sub mod {
+    my ($x, $y) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    __PACKAGE__->new($x->{a} + 1, $x->{b});
-}
-
-#
-## dec(a + b*i) = a-1 + b*i
-#
-
-sub dec {
-    my ($x) = @_;
-
-    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
-
-    __PACKAGE__->new($x->{a} - 1, $x->{b});
+    $x->sub($x->div($y)->floor->mul($y));
 }
 
 #
@@ -487,19 +502,6 @@ sub ceil {
     $t->{b} = -$t->{b};
 
     $t;
-}
-
-#
-## mod(x, y) = x - y*floor(x/y)
-#
-
-sub mod {
-    my ($x, $y) = @_;
-
-    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
-    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
-
-    $x->sub($x->div($y)->floor->mul($y));
 }
 
 ########################################################################
@@ -1084,6 +1086,15 @@ sub cmp {
 
     ($x->{a} <=> $y->{a})
       or ($x->{b} <=> $y->{b});
+}
+
+sub acmp {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    $x->abs <=> $y->abs;
 }
 
 sub lt {
