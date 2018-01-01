@@ -6,12 +6,6 @@ use warnings;
 
 our $VERSION = '0.01';
 
-state $MONE = __PACKAGE__->new(-1, 0);
-state $ZERO = __PACKAGE__->new(+0, 0);
-state $ONE  = __PACKAGE__->new(+1, 0);
-
-state $I = __PACKAGE__->new(+0, 1);
-
 use overload
   '""' => \&stringify,
   '0+' => \&numify,
