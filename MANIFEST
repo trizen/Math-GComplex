@@ -1,5 +1,6 @@
 Build.PL
 Changes
+examples/floor_and_ceil_fourier_series.pl
 examples/lanczos_approximation.pl
 examples/mandelbrot_set.pl
 ignore.txt
