@@ -46,7 +46,7 @@ sub gamma($z) {
 }
 
 foreach my $i (0.5, 4, 5, 6, 30, 40, 50) {
-    printf("gamma(%3s) =~ %s\n", real($i), gamma(real($i)));
+    printf("gamma(%3s) =~ %s\n", real($i), gamma($i));
 }
 
 __END__

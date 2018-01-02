@@ -1,9 +1,5 @@
 #!/usr/bin/perl
 
-# Daniel "Trizen" Șuteu
-# Date: 19 November 2017
-# https://github.com/trizen
-
 # Floor and ceil functions, implemented using closed-form Fourier series.
 
 # See also:
