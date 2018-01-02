@@ -85,7 +85,7 @@ use overload
         acsc  => \&acsc,
         acsch => \&acsch,
 
-        atan2 => \&atan2,
+        atan2 => sub ($$) { goto &atan2 },  # built-in function
 
         #deg2rad => \&deg2rad,
         #rad2deg => \&rad2deg,
@@ -128,8 +128,8 @@ use overload
             if ($name eq ':overload') {
                 overload::constant
                   integer => sub { __PACKAGE__->new($_[0],      0) },
-                  float   => sub { __PACKAGE__->new($_[0],      0) },
-                  binary  => sub { __PACKAGE__->new(oct($_[0]), 0) };
+                  float   => sub { __PACKAGE__->new($_[0],      0) };
+                  #binary  => sub { __PACKAGE__->new(oct($_[0]), 0) };
 
                 # Export the 'i' constant
                 foreach my $pair (['i', i()]) {

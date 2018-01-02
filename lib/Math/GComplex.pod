@@ -74,6 +74,12 @@ each number a Math::GComplex object and also exports the C<i> constant:
     CORE::say 3 + 4*i;                          #=> (3 4)
     CORE::say log(-1);                          #=> (0 3.14159265358979)
 
+B<NOTE:> C<:overload> is lexical to the current scope only.
+
+The syntax for disabling the C<:overload> behavior in the current scope, is:
+
+    no Math::GComplex;        # :overload will be disabled in the current scope
+
 Nothing is exported by default.
 
 =head1 INITIALIZATION
@@ -425,7 +431,7 @@ Example:
 
 Being a generic interface, it assumes that all the special cases (such as division by zero) are handled by the library of which type the components of a complex number are.
 
-When the components of a complex number are native Perl integers, the user may encounter errors due to division by zero or incorrect results due to overflow or underflow in some special cases.
+When the components of a complex number are native Perl numbers, the user may encounter errors due to division by zero or incorrect results due to overflow or underflow in some special cases.
 
 =head1 AUTHOR
 
