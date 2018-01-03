@@ -30,7 +30,7 @@ my $builder = Module::Build->new(
         perl => '5.014',
     },
     recommends => {
-        'Math::AnyNum' => 0.19,
+        'Math::AnyNum' => '0.20',
     },
     add_to_cleanup     => [ 'Math-GComplex-*' ],
     create_makefile_pl => 'traditional',

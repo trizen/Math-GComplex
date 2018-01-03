@@ -18,7 +18,7 @@ provides:
     file: lib/Math/GComplex.pm
     version: '0.03'
 recommends:
-  Math::AnyNum: '0.19'
+  Math::AnyNum: '0.20'
 requires:
   perl: '5.014'
 resources:
