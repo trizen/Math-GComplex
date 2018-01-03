@@ -1,5 +1,13 @@
 Revision history for Math-GComplex
 
+0.03    2018-01-03
+
+        - Added more examples.
+        - Added subroutine prototypes.
+        - Division by zero is now handled for native Perl numbers as components of complex numbers.
+        - Binary numbers are no longer overloaded (such as: `0b101`, `0xff` or `012`).
+        - Documented the syntax for disabling the `:overload` behavior.
+
 0.02    2018-01-01
 
         - Removed some non-portable tests.

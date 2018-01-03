@@ -5,7 +5,7 @@
 # See also:
 #   https://en.wikipedia.org/wiki/Floor_and_ceiling_functions#Continuity_and_series_expansions
 
-use 5.020;
+use 5.022;
 use warnings;
 
 use experimental qw(signatures);
