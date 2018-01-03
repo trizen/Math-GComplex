@@ -758,7 +758,7 @@ sub atan ($) {
 }
 
 #
-## atan2(x, y) = atan(x/y)
+## atan2(a, b) = -i * log((b + a*i) / sqrt(a^2 + b^2))
 #
 
 sub atan2 {
@@ -767,7 +767,18 @@ sub atan2 {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->div($y)->atan;
+    state $i = __PACKAGE__->new(0, 1);
+
+    my $t = $x->mul($i);
+
+    $t->{a} += $y->{a};
+    $t->{b} += $y->{b};
+
+    $t = $t->div($x->mul($x)->add($y->mul($y))->sqrt)->log;
+
+    @{$t}{'a', 'b'} = ($t->{b}, -$t->{a});
+
+    $t;
 }
 
 #

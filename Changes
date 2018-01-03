@@ -1,5 +1,9 @@
 Revision history for Math-GComplex
 
+0.04    2018-??-??
+
+        - Fixed the result of the `atan2(x, y)` function, when `x` and `y` are complex numbers.
+
 0.03    2018-01-03
 
         - Added more examples.
