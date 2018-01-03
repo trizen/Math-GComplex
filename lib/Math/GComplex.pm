@@ -85,7 +85,7 @@ use overload
         acsc  => \&acsc,
         acsch => \&acsch,
 
-        atan2 => sub ($$) { goto &atan2 },  # built-in function
+        atan2 => sub ($$) { goto &atan2 },    # built-in function
 
         #deg2rad => \&deg2rad,
         #rad2deg => \&rad2deg,
@@ -127,9 +127,10 @@ use overload
 
             if ($name eq ':overload') {
                 overload::constant
-                  integer => sub { __PACKAGE__->new($_[0],      0) },
-                  float   => sub { __PACKAGE__->new($_[0],      0) };
-                  #binary  => sub { __PACKAGE__->new(oct($_[0]), 0) };
+                  integer => sub { __PACKAGE__->new($_[0], 0) },
+                  float   => sub { __PACKAGE__->new($_[0], 0) };
+
+                #binary  => sub { __PACKAGE__->new(oct($_[0]), 0) };
 
                 # Export the 'i' constant
                 foreach my $pair (['i', i()]) {
@@ -257,6 +258,10 @@ sub div {
 
     my $d = $y->{a} * $y->{a} + $y->{b} * $y->{b};
 
+    if (!ref($d) and $d == 0) {
+        return $x->log->sub($y->log)->exp;
+    }
+
     __PACKAGE__->new(($x->{a} * $y->{a} + $x->{b} * $y->{b}) / $d, ($x->{b} * $y->{a} - $x->{a} * $y->{b}) / $d);
 }
 
@@ -274,7 +279,7 @@ sub mod {
 }
 
 #
-## inv(a + b*i) = a/(a^2 + b^2) - i*b/(a^2 + b^2)
+## inv(x) = 1/x
 #
 
 sub inv {
@@ -282,9 +287,9 @@ sub inv {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $den = $x->{a} * $x->{a} + $x->{b} * $x->{b};
+    state $one = __PACKAGE__->new(1, 0);
 
-    __PACKAGE__->new($x->{a} / $den, -$x->{b} / $den);
+    $one->div($x);
 }
 
 #
@@ -351,7 +356,7 @@ sub log {
     my $t = $x->{a} * $x->{a} + $x->{b} * $x->{b};
 
     if (!ref($t) and $t == 0) {
-        return __PACKAGE__->new(-'inf', 0);
+        return __PACKAGE__->new(0 + '-Inf', 0);
     }
 
     __PACKAGE__->new(CORE::log($t) / 2, CORE::atan2($x->{b}, $x->{a}));

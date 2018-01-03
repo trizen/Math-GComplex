@@ -431,7 +431,8 @@ Example:
 
 Being a generic interface, it assumes that all the special cases (such as division by zero) are handled by the library of which type the components of a complex number are.
 
-When the components of a complex number are native Perl numbers, the user may encounter errors due to division by zero or incorrect results due to overflow or underflow in some special cases.
+When the components of a complex number are native Perl numbers, the library handles the "division by zero" and the "logarithm of zero" cases.
+However the user may still encounter incorrect results due to overflow or underflow in some special cases (such as C<coth(1e6) = (NaN NaN)>).
 
 =head1 AUTHOR
 
