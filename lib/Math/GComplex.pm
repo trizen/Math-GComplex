@@ -191,20 +191,25 @@ sub new {
 }
 
 #
-## i = sqrt(-1)
-#
-
-sub i {
-    __PACKAGE__->new(0, 1);
-}
-
-#
 ## cplx(a, b) = a + b*i
 #
 
 sub cplx {
     my ($x, $y) = @_;
-    __PACKAGE__->new($x, $y);
+
+    bless {
+           a => $x // 0,
+           b => $y // 0,
+          },
+      __PACKAGE__;
+}
+
+#
+## i = sqrt(-1)
+#
+
+sub i {
+    __PACKAGE__->new(0, 1);
 }
 
 #
@@ -282,7 +287,7 @@ sub mod {
 ## inv(x) = 1/x
 #
 
-sub inv {
+sub inv ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -308,7 +313,7 @@ sub abs {
 ## sgn(a + b*i) = (a + b*i) / abs(a + b*i)
 #
 
-sub sgn {
+sub sgn ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -336,7 +341,7 @@ sub neg {
 ## conj(a + b*i) = a - b*i
 #
 
-sub conj {
+sub conj ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -366,7 +371,7 @@ sub log {
 ## logn(x, n) = log(x) / log(n)
 #
 
-sub logn {
+sub logn ($$) {
     my ($x, $n) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -406,7 +411,7 @@ sub pow {
 ## root(a + b*i, x) = (a + b*i)^(1/x)
 #
 
-sub root {
+sub root ($$) {
     my ($x, $y) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -436,7 +441,7 @@ sub sqrt {
 ## cbrt(a + b*i) = exp(log(a + b*i) / 3)
 #
 
-sub cbrt {
+sub cbrt ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -472,7 +477,7 @@ sub int {
 ## floor(a + b*i) = floor(a) + floor(b)*i
 #
 
-sub floor {
+sub floor ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -490,7 +495,7 @@ sub floor {
 ## ceil(a + b*i) = -floor(-(a + b*i))
 #
 
-sub ceil {
+sub ceil ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -534,7 +539,7 @@ sub sin {
 ## sinh(a + b*i) = (exp(2 * (a + b*i)) - 1) / (2*exp(a + b*i))
 #
 
-sub sinh {
+sub sinh ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -555,7 +560,7 @@ sub sinh {
 ## asin(a + b*i) = -i*log(sqrt(1 - (a + b*i)^2) + i*a - b)
 #
 
-sub asin {
+sub asin ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -574,7 +579,7 @@ sub asin {
 ## asinh(a + b*i) = log(sqrt((a + b*i)^2 + 1) + (a + b*i))
 #
 
-sub asinh {
+sub asinh ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -616,7 +621,7 @@ sub cos {
 ## cosh(a + b*i) = (exp(2 * (a + b*i)) + 1) / (2*exp(a + b*i))
 #
 
-sub cosh {
+sub cosh ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -637,7 +642,7 @@ sub cosh {
 ## acos(a + b*i) = -2*i*log(i*sqrt((1 - (a + b*i))/2) + sqrt((1 + (a + b*i))/2))
 #
 
-sub acos {
+sub acos ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -664,7 +669,7 @@ sub acos {
 ## acosh(a + b*i) = log((a + b*i) + sqrt((a + b*i) - 1) * sqrt((a + b*i) + 1))
 #
 
-sub acosh {
+sub acosh ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -688,7 +693,7 @@ sub acosh {
 ## tan(a + b*i) = (2*i)/(exp(2*i*(a + b*i)) + 1) - i
 #
 
-sub tan {
+sub tan ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -716,7 +721,7 @@ sub tan {
 ## tanh(a + b*i) = (exp(2 * (a + b*i)) - 1) / (exp(2 * (a + b*i)) + 1)
 #
 
-sub tanh {
+sub tanh ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -733,7 +738,7 @@ sub tanh {
 ## atan(a + b*i) = i * (log(1 - i*(a + b*i)) - log(1 + i*(a + b*i))) / 2
 #
 
-sub atan {
+sub atan ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -769,7 +774,7 @@ sub atan2 {
 ## atanh(a + b*i) = (log(1 + (a + b*i)) - log(1 - (a + b*i))) / 2
 #
 
-sub atanh {
+sub atanh ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -794,7 +799,7 @@ sub atanh {
 ## cot(a + b*i) = (2*i)/(exp(2*i*(a + b*i)) - 1) + i
 #
 
-sub cot {
+sub cot ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -822,7 +827,7 @@ sub cot {
 ## coth(a + b*i) = (exp(2 * (a + b*i)) + 1) / (exp(2 * (a + b*i)) - 1)
 #
 
-sub coth {
+sub coth ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -839,7 +844,7 @@ sub coth {
 ## acot(a + b*i) = atan(1/(a + b*i))
 #
 
-sub acot {
+sub acot ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -851,7 +856,7 @@ sub acot {
 ## acoth(a + b*i) = atanh(1 / (a + b*i))
 #
 
-sub acoth {
+sub acoth ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -867,7 +872,7 @@ sub acoth {
 ## sec(a + b*i) = 2/(exp(-i*(a + b*i)) + exp(i*(a + b*i)))
 #
 
-sub sec {
+sub sec ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -893,7 +898,7 @@ sub sec {
 ## asec(a + b*i) = acos(1/(a + b*i))
 #
 
-sub asec {
+sub asec ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -905,7 +910,7 @@ sub asec {
 ## sech(a + b*i) = (2 * exp(a + b*i)) / (exp(2 * (a + b*i)) + 1)
 #
 
-sub sech {
+sub sech ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -925,7 +930,7 @@ sub sech {
 ## asech(a + b*i) = acosh(1/(a + b*i))
 #
 
-sub asech {
+sub asech ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -941,7 +946,7 @@ sub asech {
 ## csc(a + b*i) = -(2*i)/(exp(-i * (a + b*i)) - exp(i * (a + b*i)))
 #
 
-sub csc {
+sub csc ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -969,7 +974,7 @@ sub csc {
 ## csch(a + b*i) = (2*exp(a + b*i)) / (exp(2 * (a + b*i)) - 1)
 #
 
-sub csch {
+sub csch ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -989,7 +994,7 @@ sub csch {
 ## acsc(a + b*i) = asin(1/(a + b*i))
 #
 
-sub acsc {
+sub acsc ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -1001,7 +1006,7 @@ sub acsc {
 ## acsch(a + b*i) = asinh(1/(a + b*i))
 #
 
-sub acsch {
+sub acsch ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -1013,7 +1018,7 @@ sub acsch {
 ## real(a + b*i) = a
 #
 
-sub real {
+sub real ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -1025,7 +1030,7 @@ sub real {
 ## imag(a + b*i) = b
 #
 
-sub imag {
+sub imag ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -1037,7 +1042,7 @@ sub imag {
 ## reals(a + b*i) = (a, b)
 #
 
-sub reals {
+sub reals ($) {
     my ($x) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -1087,7 +1092,7 @@ sub cmp {
       or ($x->{b} <=> $y->{b});
 }
 
-sub acmp {
+sub acmp ($$) {
     my ($x, $y) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;

@@ -109,34 +109,39 @@ This section describes all the basic operations provided by this module.
 =head2 add
 
     $x + $y
+    $x->add($y)
 
 Addition of C<$x> and C<$y>.
 
 =head2 sub
 
     $x - $y
+    $x->sub($y)
 
 Subtraction of C<$y> from C<$x>.
 
 =head2 mul
 
     $x * $y
+    $x->mul($y)
 
 Multiplication of C<$x> and C<$y>.
 
 =head2 div
 
     $x / $y
+    $x->div($y)
 
 Division of C<$x> by C<$y>.
 
 =head2 mod
 
     $x % $y
+    $x->mod($y)
 
 Remainder of C<$x> when divided by C<$y>, defined as:
 
-    $x % $y = $x - $y*floor($x/$y)
+    $x % $y = $x - $y * floor($x/$y)
 
 =head2 neg
 
@@ -176,6 +181,7 @@ This section describes the special mathematical functions provided by this modul
 
 =head2 log
 
+    log($x)
     $x->log
 
 Natural logarithm of C<$x>.
@@ -192,12 +198,14 @@ Defined as:
 
 =head2 exp
 
+    exp($x)
     $x->exp
 
 Natural exponentiation of C<$x>.
 
 =head2 sqrt
 
+    sqrt($x)
     $x->sqrt
 
 Square root of C<$x>. Equivalent with C<$x**(1/2)>.
@@ -285,6 +293,7 @@ Cosecant, hyperbolic cosecant, inverse cosecant and inverse hyperbolic cosecant.
 
 =head2 atan2
 
+    atan2($x, $y)
     $x->atan2($y)
 
 The arctangent of the quotient of its arguments (i.e.: C<atan(x/y)>).
@@ -311,6 +320,7 @@ The ceil function, defined for a complex number as:
 
 =head2 int
 
+    int($x)
     $x->int
 
 The integer-truncation function, defined for a complex number as:
@@ -424,15 +434,15 @@ Returns a stringification version of C<$x>.
 
 Example:
 
-    Math::GComplex->new(3, -4)->stringify;    # "(3 -4)"
-    Math::GComplex->new(-3, 4)->stringify;    # "(-3 4)"
+    Math::GComplex->new( 3, -4)->stringify;    # "(3 -4)"
+    Math::GComplex->new(-5,  6)->stringify;    # "(-5 6)"
 
 =head1 LIMITATIONS
 
 Being a generic interface, it assumes that all the special cases (such as division by zero) are handled by the library of which type the components of a complex number are.
 
-When the components of a complex number are native Perl numbers, the library handles the "division by zero" and the "logarithm of zero" cases.
-However the user may still encounter incorrect results due to overflow or underflow in some special cases (such as C<coth(1e6) = (NaN NaN)>).
+When the components of a complex number are native Perl numbers, the "division by zero" and the "logarithm of zero" cases are implicitly handled by this library.
+However the user may still encounter incorrect results due to overflow or underflow in some special cases (such as C<coth(1e6) = (NaN NaN)> and C<cosh(1e6) = (NaN NaN)>).
 
 =head1 AUTHOR
 
