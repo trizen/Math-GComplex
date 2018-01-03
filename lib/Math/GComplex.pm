@@ -350,7 +350,7 @@ sub conj ($) {
 }
 
 #
-## log(a + b*i) = log(a^2 + b^2)/2 + atan(b/a)*i
+## log(a + b*i) = log(a^2 + b^2)/2 + atan2(b, a)*i    -- where a,b are real
 #
 
 sub log {
