@@ -9,6 +9,8 @@ BEGIN {
     eval { require Math::AnyNum };
     plan skip_all => "Math::AnyNum is not installed"
       if $@;
+    plan skip_all => "Math::AnyNum >= 0.20 is needed"
+      if ($Math::AnyNum::VERSION < 0.20);
 }
 
 plan tests => 180;
