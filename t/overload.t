@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More;
 
-plan tests => 36;
+plan tests => 44;
 
 use Math::GComplex qw(:overload acos cosh);
 
@@ -42,4 +42,26 @@ use Math::GComplex qw(:overload acos cosh);
         is(sprintf('%.0f', abs($x)), $t, "a($n) = $x");
         is(sprintf('%.0f', abs($y)), $t, "a($n) = $y");
     }
+}
+
+{
+    # Each component of a complex number is another complex number (with imaginary part = 0)
+    my $x = Math::GComplex->new(-3, -4);
+    my $y = Math::GComplex->new(-7, -5);
+
+    my $z = atan2($x, $y);
+
+    is(ref($z->real), 'Math::GComplex');
+    is(ref($z->imag), 'Math::GComplex');
+
+    like($z->real->real, qr/^-2\.6255065752\d*\z/);
+    like($z->imag->real, qr/^0\.13446357403\d*\z/);
+
+    ok(abs($z->real->imag - 0) <= 1e-10);
+    ok(abs($z->imag->imag - 0) <= 1e-10);
+
+    my $z2 = atan2(-3 - 4 * i, -7 - 5 * i);
+
+    like($z2->real, qr/^-2\.6255065752\d*\z/);
+    like($z2->imag, qr/^0\.13446357403\d*\z/);
 }
