@@ -11,7 +11,7 @@ BEGIN {
       if $@;
 }
 
-plan tests => 176;
+plan tests => 180;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -241,6 +241,12 @@ is(join(' ', Math::GComplex->new(13.7,  -15.3)->floor->reals), '13 -16');
 is(join(' ', Math::GComplex->new(13.7,  -15.9)->floor->reals), '13 -16');
 is(join(' ', Math::GComplex->new(13.3,  -15.9)->floor->reals), '13 -16');
 is(join(' ', Math::GComplex->new(-13.3, -15.9)->floor->reals), '-14 -16');
+
+is(join(' ', Math::GComplex->new(-14, -15)->floor->reals), '-14 -15');
+is(join(' ', Math::GComplex->new(14,  15)->floor->reals),  '14 15');
+
+is(join(' ', Math::GComplex->new(-14, -15)->ceil->reals), '-14 -15');
+is(join(' ', Math::GComplex->new(14,  15)->ceil->reals),  '14 15');
 
 is(join(' ', int(Math::GComplex->new(13.7,  12.4))->reals),  '13 12');
 is(join(' ', int(Math::GComplex->new(13.7,  -12.4))->reals), '13 -12');

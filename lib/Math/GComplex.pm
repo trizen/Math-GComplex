@@ -483,10 +483,10 @@ sub floor ($) {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     my $t1 = CORE::int($x->{a});
-    $t1 -= 1 if ($x->{a} < 0);
+    $t1 -= 1 if ($x->{a} != $t1 and $x->{a} < 0);
 
     my $t2 = CORE::int($x->{b});
-    $t2 -= 1 if ($x->{b} < 0);
+    $t2 -= 1 if ($x->{b} != $t2 and $x->{b} < 0);
 
     __PACKAGE__->new($t1, $t2);
 }
