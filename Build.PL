@@ -27,7 +27,7 @@ my $builder = Module::Build->new(
         'Test::More' => '0',
     },
     requires => {
-        perl => '5.014',
+        perl => '5.010',
     },
     recommends => {
         'Math::AnyNum' => '0.20',
