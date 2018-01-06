@@ -906,18 +906,6 @@ sub sec ($) {
 }
 
 #
-## asec(a + b*i) = acos(1/(a + b*i))
-#
-
-sub asec ($) {
-    my ($x) = @_;
-
-    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
-
-    $x->inv->acos;
-}
-
-#
 ## sech(a + b*i) = (2 * exp(a + b*i)) / (exp(2 * (a + b*i)) + 1)
 #
 
@@ -935,6 +923,18 @@ sub sech ($) {
     $t2->{a} += 1;
 
     $t1->div($t2);
+}
+
+#
+## asec(a + b*i) = acos(1/(a + b*i))
+#
+
+sub asec ($) {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->inv->acos;
 }
 
 #
