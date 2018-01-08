@@ -1099,8 +1099,8 @@ sub cmp {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    ($x->{a} <=> $y->{a})
-      or ($x->{b} <=> $y->{b});
+    (($x->{a} <=> $y->{a}) // return undef)
+      or (($x->{b} <=> $y->{b}) // return undef);
 }
 
 sub acmp ($$) {
@@ -1118,7 +1118,7 @@ sub lt {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->cmp($y) < 0;
+    ($x->cmp($y) // return undef) < 0;
 }
 
 sub le {
@@ -1127,7 +1127,7 @@ sub le {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->cmp($y) <= 0;
+    ($x->cmp($y) // return undef) <= 0;
 }
 
 sub gt {
@@ -1136,7 +1136,7 @@ sub gt {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->cmp($y) > 0;
+    ($x->cmp($y) // return undef) > 0;
 }
 
 sub ge {
@@ -1145,7 +1145,7 @@ sub ge {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->cmp($y) >= 0;
+    ($x->cmp($y) // return undef) >= 0;
 }
 
 sub stringify {
