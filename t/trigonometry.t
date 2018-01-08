@@ -174,19 +174,18 @@ for my $iter (1 .. 3) {
 #   http://rosettacode.org/wiki/Trigonometric_functions#Perl
 
 {
-    my $angle_degrees = 45;
-    my $angle_radians = atan2(0, -1) / 4;
+    my $theta = atan2(0, -1) / 4;
 
-    is(sin($angle_radians), '(0.707106781186547 0)', 'sin(x)');
-    is(cos($angle_radians), '(0.707106781186548 0)', 'cos(x)');
+    is(sin($theta), '(0.707106781186547 0)', 'sin(x)');
+    is(cos($theta), '(0.707106781186548 0)', 'cos(x)');
 
-    is(tan($angle_radians), '(1 0)', 'tan(x)');
-    is(cot($angle_radians), '(1 0)', 'cot(x)');
+    is(tan($theta), '(1 0)', 'tan(x)');
+    is(cot($theta), '(1 0)', 'cot(x)');
 
-    is(asin(sin($angle_radians)), '(0.785398163397448 0)', 'asin(sin(x))');
-    is(acos(cos($angle_radians)), '(0.785398163397448 0)', 'acos(cos(x))');
-    is(atan(tan($angle_radians)), '(0.785398163397448 0)', 'atan(tan(x))');
-    is(acot(cot($angle_radians)), '(0.785398163397448 0)', 'acot(cot(x))');
-    is(asec(sec($angle_radians)), '(0.785398163397448 0)', 'asec(sec(x))');
-    is(acsc(csc($angle_radians)), '(0.785398163397448 0)', 'acsc(csc(x))');
+    is(asin(sin($theta)), '(0.785398163397448 0)', 'asin(sin(x))');
+    is(acos(cos($theta)), '(0.785398163397448 0)', 'acos(cos(x))');
+    is(atan(tan($theta)), '(0.785398163397448 0)', 'atan(tan(x))');
+    is(acot(cot($theta)), '(0.785398163397448 0)', 'acot(cot(x))');
+    is(asec(sec($theta)), '(0.785398163397448 0)', 'asec(sec(x))');
+    is(acsc(csc($theta)), '(0.785398163397448 0)', 'acsc(csc(x))');
 }
