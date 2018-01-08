@@ -5,23 +5,20 @@ use strict;
 use warnings;
 use Test::More;
 
-## Tests from Math::Complex / Math::Trig
+## Tests from Math::Complex / Math::Trig (+ some additional ones)
 ## https://metacpan.org/source/ZEFRAM/Math-Complex-1.59/t/Trig.t
 
 use Math::GComplex qw(:trig :special i);
 
-plan tests => 130;
+plan tests => 140;
 
 my $eps = 1e-10;
 
 sub near ($$;$) {
     my $e = $_[2] // $eps;
     my $d = $_[1] ? abs($_[0] / $_[1] - 1) : abs($_[0]);
-    print "# near? $_[0] $_[1] : $d : $e\n";
     $_[1] ? ($d < $e) : abs($_[0]) < $e;
 }
-
-print "# Sanity checks\n";
 
 ok(near(sin(1), 0.841470984807897));
 ok(near(cos(1), 0.54030230586814));
@@ -49,13 +46,11 @@ ok(near(coth(1), 1.31303528549933));
 
 ok(near(asinh(1),   0.881373587019543));
 ok(near(acosh(1),   0));
-ok(near(atanh(0.9), 1.47221948958322));    # atanh(1.0) would be an error.
+ok(near(atanh(0.9), 1.47221948958322));
 
 ok(near(asech(0.9), 0.467145308103262));
 ok(near(acsch(2),   0.481211825059603));
 ok(near(acoth(2),   0.549306144334055));
-
-print "# Basics\n";
 
 my $x = 0.9;
 ok(near(tan($x), sin($x) / cos($x)));
@@ -72,8 +67,6 @@ ok(near($z, -1.31695789692482));
 
 #ok(near(deg2rad(90), pi/2));
 #ok(near(rad2deg(pi), 180));
-
-print "# sinh/sech/cosh/csch/tanh/coth unto infinity\n";
 
 ok(near(sinh(100), 1.3441e+43, 1e-3));
 ok(near(sech(100), 7.4402e-44, 1e-3));
@@ -98,8 +91,6 @@ cmp_ok(sech(-1e5), '==', 0);
 cmp_ok(csch(-1e5), '==', 0);
 cmp_ok(tanh(-1e5), '==', -1);
 cmp_ok(coth(-1e5), '==', -1);
-
-#~ print "# asin_real, acos_real\n";
 
 #~ ok(acos(-2.0)->real == 4 * atan2(4, 4));
 #~ ok(acos(-1.0)->real == 4 * atan2(4, 4));
@@ -177,4 +168,25 @@ for my $iter (1 .. 3) {
     ok(near(asech($z), acosh(1 / $z)));
     ok(near(acoth($z), atanh(1 / $z)));
     ok(near(acoth($z), 1 / 2 * log((1 + $z) / ($z - 1))));
+}
+
+# More trigonometric tests
+#   http://rosettacode.org/wiki/Trigonometric_functions#Perl
+
+{
+    my $angle_degrees = 45;
+    my $angle_radians = atan2(0, -1) / 4;
+
+    is(sin($angle_radians), '(0.707106781186547 0)', 'sin(x)');
+    is(cos($angle_radians), '(0.707106781186548 0)', 'cos(x)');
+
+    is(tan($angle_radians), '(1 0)', 'tan(x)');
+    is(cot($angle_radians), '(1 0)', 'cot(x)');
+
+    is(asin(sin($angle_radians)), '(0.785398163397448 0)', 'asin(sin(x))');
+    is(acos(cos($angle_radians)), '(0.785398163397448 0)', 'acos(cos(x))');
+    is(atan(tan($angle_radians)), '(0.785398163397448 0)', 'atan(tan(x))');
+    is(acot(cot($angle_radians)), '(0.785398163397448 0)', 'acot(cot(x))');
+    is(asec(sec($angle_radians)), '(0.785398163397448 0)', 'asec(sec(x))');
+    is(acsc(csc($angle_radians)), '(0.785398163397448 0)', 'acsc(csc(x))');
 }
