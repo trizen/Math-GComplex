@@ -395,7 +395,7 @@ sub exp {
 }
 
 #
-## (a + b*i)^x = exp(log(a+b*i) * x)
+## x^y = exp(log(x) * y)
 #
 
 sub pow {
@@ -408,7 +408,7 @@ sub pow {
 }
 
 #
-## root(a + b*i, x) = (a + b*i)^(1/x)
+## root(x, y) = exp(log(x) / y)
 #
 
 sub root ($$) {
@@ -417,7 +417,7 @@ sub root ($$) {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->pow($y->inv);
+    $x->log->div($y)->exp;
 }
 
 #

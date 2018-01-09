@@ -149,7 +149,7 @@ Division of C<$x> by C<$y>, defined as:
 
 Remainder of C<$x> when divided by C<$y>, defined as:
 
-    mod(x, y) = x - y * floor(x/y)
+    mod(a, b) = a - b * floor(a/b)
 
 =head2 neg
 
@@ -223,6 +223,23 @@ Natural exponentiation of C<$x>, defined as:
 
     exp(a + b*i) = exp(a) * cos(b) + exp(a) * sin(b) * i
 
+=head2 pow
+
+    $x**$y
+    $x->pow($y)
+
+Raises C<$x> to power C<$y> and returns the result, defined as:
+
+    a^b = exp(log(a) * b)
+
+=head2 root
+
+    $x->root($y)
+
+Nth root of C<$x>, defined as:
+
+    root(a, b) = exp(log(a) / b)
+
 =head2 sqrt
 
     sqrt($x)
@@ -239,23 +256,6 @@ Square root of C<$x>, defined as:
 Cube root of C<$x>, defined as:
 
     cbrt(x) = exp(log(x) / 3)
-
-=head2 root
-
-    $x->root($y)
-
-Nth root of C<$x>, defined as:
-
-    root(a, x) = a^(1/x)
-
-=head2 pow
-
-    $x**$y
-    $x->pow($y)
-
-Raises C<$x> to power C<$y> and returns the result, defined as:
-
-    a^x = exp(log(a) * x)
 
 =head1 TRIGONOMETRIC FUNCTIONS
 
@@ -476,7 +476,7 @@ Complex numbers are compared as:
 
 Absolute comparison of C<$x> and C<$y>, defined as:
 
-    acmp(x, y) = abs(x) <=> abs(y)
+    acmp(a, b) = abs(a) <=> abs(b)
 
 =head1 * Conversions
 
