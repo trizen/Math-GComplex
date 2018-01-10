@@ -43,7 +43,7 @@ The following functions are exportable:
         cot coth acot acoth
         sec sech asec asech
         csc csch acsc acsch
-        atan2
+        atan2 deg2rad rad2deg
 
     :special
         log logn exp sqrt cbrt root
@@ -365,6 +365,24 @@ Defined as:
 The arc tangent of C<$x> and C<$y>, defined as:
 
     atan2(a, b) = -i * log((b + a*i) / sqrt(a^2 + b^2))
+
+=head2 deg2rad
+
+Returns the value of C<x> converted from degrees to radians.
+
+Defined as:
+
+    deg2rad(x) = x / 180 * atan2(0, -abs(x))
+
+=head2 rad2deg
+
+    my $deg = $x->rad2deg;
+
+Returns the value of C<x> converted from radians to degrees.
+
+Defined as:
+
+    rad2deg(x) = x * 180 / atan2(0, -abs(x))
 
 =head1 MISCELLANEOUS FUNCTIONS
 

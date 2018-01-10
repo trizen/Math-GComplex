@@ -10,7 +10,7 @@ use Test::More;
 
 use Math::GComplex qw(:trig :special i);
 
-plan tests => 140;
+plan tests => 150;
 
 my $eps = 1e-10;
 
@@ -65,8 +65,20 @@ my ($y, $z) = $x->reals;
 ok(near($y, 1.5707963267949));
 ok(near($z, -1.31695789692482));
 
-#ok(near(deg2rad(90), pi/2));
-#ok(near(rad2deg(pi), 180));
+ok(near(deg2rad(90), atan2(0, -1) / 2));
+ok(near(rad2deg(atan2(0, -1)), 180));
+
+is(deg2rad(0), '(0 0)');
+is(rad2deg(0), '(0 0)');
+
+ok(near(deg2rad(-45), -atan2(0, -1) / 4));
+ok(near(rad2deg(-atan2(0, -1) / 4), -45));
+
+is(deg2rad(rad2deg(-10)), '(-10 0)');
+is(rad2deg(deg2rad(-10)), '(-10 0)');
+
+is(deg2rad(rad2deg(0)), '(0 0)');
+is(rad2deg(deg2rad(0)), '(0 0)');
 
 ok(near(sinh(100), 1.3441e+43, 1e-3));
 ok(near(sech(100), 7.4402e-44, 1e-3));

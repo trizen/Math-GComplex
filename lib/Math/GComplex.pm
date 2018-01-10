@@ -87,14 +87,14 @@ use overload
 
         atan2 => sub ($$) { goto &atan2 },    # built-in function
 
-        #deg2rad => \&deg2rad,
-        #rad2deg => \&rad2deg,
+        deg2rad => \&deg2rad,
+        rad2deg => \&rad2deg,
                );
 
     my %special = (
-                   exp  => sub (_) { goto &exp },     # built-in function
-                   log  => sub (_) { goto &log },     # built-in function
-                   sqrt => sub (_) { goto &sqrt },    # built-in function
+                   exp  => sub (_) { goto &exp },        # built-in function
+                   log  => sub (_) { goto &log },        # built-in function
+                   sqrt => sub (_) { goto &sqrt },       # built-in function
                    cbrt => \&cbrt,
                    logn => \&logn,
                    root => \&root,
@@ -105,7 +105,7 @@ use overload
         acmp => \&acmp,
         cplx => \&cplx,
 
-        abs => sub (_) { goto &abs },      # built-in function
+        abs => sub (_) { goto &abs },         # built-in function
 
         inv  => \&inv,
         sgn  => \&sgn,
@@ -129,8 +129,6 @@ use overload
                 overload::constant
                   integer => sub { __PACKAGE__->new($_[0], 0) },
                   float   => sub { __PACKAGE__->new($_[0], 0) };
-
-                #binary  => sub { __PACKAGE__->new(oct($_[0]), 0) };
 
                 # Export the 'i' constant
                 foreach my $pair (['i', i()]) {
@@ -177,7 +175,8 @@ use overload
     }
 
     sub unimport {
-        overload::remove_constant('binary', '', 'float', '', 'integer');
+        overload::remove_constant(float   => '',
+                                  integer => '',);
     }
 }
 
@@ -1019,6 +1018,57 @@ sub acsch ($) {
 
     $x->inv->asinh;
 }
+
+#
+## deg2rad(x) = x / 180 * atan2(0, -abs(x))
+#
+
+sub deg2rad ($) {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t = __PACKAGE__->new($x->{a} / 180, $x->{b} / 180);
+    my $pi = CORE::atan2(0, -CORE::abs($x));
+
+    if (!ref($pi)) {
+        $t->{a} *= $pi;
+        $t->{b} *= $pi;
+        return $t;
+    }
+
+    $t->mul($pi);
+}
+
+#
+## rad2deg(x) = x * 180 / atan2(0, -abs(x))
+#
+
+sub rad2deg ($) {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    my $t = __PACKAGE__->new($x->{a} * 180, $x->{b} * 180);
+
+    my $abs_x = CORE::abs($x);
+
+    if ($abs_x == 0) {
+        return $t;
+    }
+
+    my $pi = CORE::atan2(0, -$abs_x);
+
+    if (!ref($pi) and $pi != 0) {
+        $t->{a} /= $pi;
+        $t->{b} /= $pi;
+        return $t;
+    }
+
+    $t->div($pi);
+}
+
+########################### MISC FUNCTIONS ###########################
 
 #
 ## real(a + b*i) = a

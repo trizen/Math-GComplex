@@ -13,7 +13,7 @@ BEGIN {
       if ($Math::AnyNum::VERSION < 0.20);
 }
 
-plan tests => 180;
+plan tests => 186;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -262,3 +262,11 @@ is(join(' ', Math::GComplex->new(13.7,  -15.3)->ceil->reals), '14 -15');
 is(join(' ', Math::GComplex->new(13.7,  -15.9)->ceil->reals), '14 -15');
 is(join(' ', Math::GComplex->new(13.3,  -15.9)->ceil->reals), '14 -15');
 is(join(' ', Math::GComplex->new(-13.3, -15.9)->ceil->reals), '-13 -15');
+
+is(join(' ', Math::GComplex::deg2rad(45)->reals),              join(' ', (Math::AnyNum->pi / 4)->reals));
+is(join(' ', Math::GComplex::deg2rad(Math::AnyNum->e)->reals), join(' ', (Math::AnyNum->e->deg2rad)->reals));
+is(join(' ', Math::GComplex::deg2rad(0)->reals),               '0 0');
+
+is(join(' ', Math::GComplex::rad2deg(Math::AnyNum->pi / 4)->reals), '45 0');
+is(join(' ', Math::GComplex::rad2deg(Math::AnyNum->e)->reals), join(' ', Math::AnyNum->e->rad2deg->reals));
+is(join(' ', Math::GComplex::rad2deg(0)->reals), '0 0');
