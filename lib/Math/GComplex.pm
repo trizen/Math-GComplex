@@ -767,12 +767,7 @@ sub atan2 {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    state $i = __PACKAGE__->new(0, 1);
-
-    my $t = $x->mul($i);
-
-    $t->{a} += $y->{a};
-    $t->{b} += $y->{b};
+    my $t = __PACKAGE__->new($y->{a} - $x->{b}, $x->{a} + $y->{b});
 
     $t = $t->div($x->mul($x)->add($y->mul($y))->sqrt)->log;
 
