@@ -1,9 +1,10 @@
 Revision history for Math-GComplex
 
-0.06    2018-??-??
+0.06    2018-01-20
 
         - Added the `rad2deg(x)` and `deg2rad(x)` functions.
         - Comparing anything to `NaN` (including `NaN` itself), now returns `undef`.
+        - Minor performance improvements.
 
 0.05    2018-01-06
 
