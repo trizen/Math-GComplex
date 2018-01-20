@@ -1029,7 +1029,7 @@ sub deg2rad ($) {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     my $t = __PACKAGE__->new($x->{a} / 180, $x->{b} / 180);
-    my $pi = CORE::atan2(0, -CORE::abs($x));
+    my $pi = CORE::atan2(0, -($x->{a} * $x->{a} + $x->{b} * $x->{b}));
 
     if (!ref($pi)) {
         $t->{a} *= $pi;
@@ -1049,23 +1049,22 @@ sub rad2deg ($) {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t = __PACKAGE__->new($x->{a} * 180, $x->{b} * 180);
+    my $r = __PACKAGE__->new($x->{a} * 180, $x->{b} * 180);
+    my $t = $x->{a} * $x->{a} + $x->{b} * $x->{b};
 
-    my $abs_x = CORE::abs($x);
-
-    if ($abs_x == 0) {
-        return $t;
+    if ($t == 0) {
+        return $r;
     }
 
-    my $pi = CORE::atan2(0, -$abs_x);
+    my $pi = CORE::atan2(0, -$t);
 
     if (!ref($pi) and $pi != 0) {
-        $t->{a} /= $pi;
-        $t->{b} /= $pi;
-        return $t;
+        $r->{a} /= $pi;
+        $r->{b} /= $pi;
+        return $r;
     }
 
-    $t->div($pi);
+    $r->div($pi);
 }
 
 ########################### MISC FUNCTIONS ###########################
