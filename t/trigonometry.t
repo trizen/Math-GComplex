@@ -188,16 +188,16 @@ for my $iter (1 .. 3) {
 {
     my $theta = atan2(0, -1) / 4;
 
-    is(sin($theta), '(0.707106781186547 0)', 'sin(x)');
-    is(cos($theta), '(0.707106781186548 0)', 'cos(x)');
+    ok(near(sin($theta), 0.707106781186547), 'sin(x)');
+    ok(near(cos($theta), 0.707106781186548), 'cos(x)');
 
     is(tan($theta), '(1 0)', 'tan(x)');
     is(cot($theta), '(1 0)', 'cot(x)');
 
-    is(asin(sin($theta)), '(0.785398163397448 0)', 'asin(sin(x))');
-    is(acos(cos($theta)), '(0.785398163397448 0)', 'acos(cos(x))');
-    is(atan(tan($theta)), '(0.785398163397448 0)', 'atan(tan(x))');
-    is(acot(cot($theta)), '(0.785398163397448 0)', 'acot(cot(x))');
-    is(asec(sec($theta)), '(0.785398163397448 0)', 'asec(sec(x))');
-    is(acsc(csc($theta)), '(0.785398163397448 0)', 'acsc(csc(x))');
+    ok(near(asin(sin($theta)), 0.785398163397448), 'asin(sin(x))');
+    ok(near(acos(cos($theta)), 0.785398163397448), 'acos(cos(x))');
+    ok(near(atan(tan($theta)), 0.785398163397448), 'atan(tan(x))');
+    ok(near(acot(cot($theta)), 0.785398163397448), 'acot(cot(x))');
+    ok(near(asec(sec($theta)), 0.785398163397448), 'asec(sec(x))');
+    ok(near(acsc(csc($theta)), 0.785398163397448), 'acsc(csc(x))');
 }

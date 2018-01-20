@@ -1,5 +1,9 @@
 Revision history for Math-GComplex
 
+0.07    2018-01-20
+
+        - Fixed the trigonometry tests under Perl built with -Duselongdouble (thanks to Slaven Rezić)
+
 0.06    2018-01-20
 
         - Added the `rad2deg(x)` and `deg2rad(x)` functions.
