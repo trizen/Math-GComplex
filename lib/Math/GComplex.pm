@@ -706,8 +706,13 @@ sub tan ($) {
     $r->{a} *= 2;
     $r->{b} *= 2;
 
-    $r->{a} /= $den;
-    $r->{b} /= $den;
+    if (!ref($den) and $den == 0) {
+        $r = $r->div($den);
+    }
+    else {
+        $r->{a} /= $den;
+        $r->{b} /= $den;
+    }
 
     $r->{a} -= 1;
 
@@ -818,8 +823,13 @@ sub cot ($) {
     $r->{a} *= 2;
     $r->{b} *= 2;
 
-    $r->{a} /= $den;
-    $r->{b} /= $den;
+    if (!ref($den) and $den == 0) {
+        $r = $r->div($den);
+    }
+    else {
+        $r->{a} /= $den;
+        $r->{b} /= $den;
+    }
 
     $r->{a} += 1;
 
@@ -893,8 +903,13 @@ sub sec ($) {
     $t1->{a} *= +2;
     $t1->{b} *= -2;
 
-    $t1->{a} /= $den;
-    $t1->{b} /= $den;
+    if (!ref($den) and $den == 0) {
+        $t1 = $t1->div($den);
+    }
+    else {
+        $t1->{a} /= $den;
+        $t1->{b} /= $den;
+    }
 
     $t1;
 }
@@ -967,8 +982,13 @@ sub csc ($) {
     $t1->{a} *= -2;
     $t1->{b} *= -2;
 
-    $t1->{a} /= $den;
-    $t1->{b} /= $den;
+    if (!ref($den) and $den == 0) {
+        $t1 = $t1->div($den);
+    }
+    else {
+        $t1->{a} /= $den;
+        $t1->{b} /= $den;
+    }
 
     @{$t1}{'a', 'b'} = ($t1->{b}, $t1->{a});
 
