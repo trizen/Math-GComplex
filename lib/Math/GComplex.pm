@@ -110,6 +110,7 @@ use overload
         inv  => \&inv,
         sgn  => \&sgn,
         conj => \&conj,
+        norm => \&norm,
 
         real => \&real,
         imag => \&imag,
@@ -346,6 +347,18 @@ sub conj ($) {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     __PACKAGE__->new($x->{a}, -$x->{b});
+}
+
+#
+## norm(a + b*i) = a**2 + b**2
+#
+
+sub norm ($) {
+    my ($x) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $x->{a} * $x->{a} + $x->{b} * $x->{b};
 }
 
 #

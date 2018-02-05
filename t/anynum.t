@@ -13,7 +13,7 @@ BEGIN {
       if ($Math::AnyNum::VERSION < 0.20);
 }
 
-plan tests => 314;
+plan tests => 317;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -28,6 +28,10 @@ is(join(' ', ($x / $y)->reals), '41/74 13/74');
 
 is(join(' ', $x->conj->reals), '3 -4');
 is(join(' ', (-$y)->reals), '-7 -5');
+
+is($x->norm,       25);
+is($x->conj->norm, 25);
+is($x->neg->norm,  25);
 
 is(join(' ', log($x)->reals), join(' ', log(3 + 4 * i)->reals));
 is(join(' ', log($y)->reals), join(' ', log(7 + 5 * i)->reals));
