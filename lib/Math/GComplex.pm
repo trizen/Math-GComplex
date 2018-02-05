@@ -418,12 +418,12 @@ sub pow {
 
     if ($x->{a} == 0 and $x->{b} == 0) {
 
-        if ($y->{a} == 0 and $y->{b} == 0) {
-            return __PACKAGE__->new($x->{a} + 1, $x->{b});
-        }
-
         if ($y->{a} < 0) {
             return $x->inv;
+        }
+
+        if ($y->{a} == 0 and $y->{b} == 0) {
+            return __PACKAGE__->new($x->{a} + 1, $x->{b});
         }
 
         return __PACKAGE__->new($x->{a}, $x->{b});
