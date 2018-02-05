@@ -13,7 +13,7 @@ BEGIN {
       if ($Math::AnyNum::VERSION < 0.20);
 }
 
-plan tests => 317;
+plan tests => 330;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -32,6 +32,21 @@ is(join(' ', (-$y)->reals), '-7 -5');
 is($x->norm,       25);
 is($x->conj->norm, 25);
 is($x->neg->norm,  25);
+
+is(join(' ', Math::GComplex->new(0, 0)->pow(3)->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->pow(Math::GComplex->new(3, 4))->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->pow(0)->reals), '1 0');
+is(join(' ', Math::GComplex->new(0, 0)->pow(Math::GComplex->new(0, 0))->reals), '1 0');
+is(join(' ', Math::GComplex->new(0, 0)->pow(-2)->reals), 'Inf NaN');
+is(join(' ', Math::GComplex->new(0, 0)->pow(Math::GComplex->new(0, 0))->reals), '1 0');
+
+is(join(' ', Math::GComplex->new(0, 0)->root(0)->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->root(1)->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->root(Math::GComplex->new(1, -5))->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->root(2)->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->root(Math::GComplex->new(2, 3))->reals), '0 0');
+is(join(' ', Math::GComplex->new(0, 0)->root(-2)->reals), 'Inf NaN');
+is(join(' ', Math::GComplex->new(0, 0)->root(Math::GComplex->new(-3, 4))->reals), 'Inf NaN');
 
 is(join(' ', log($x)->reals), join(' ', log(3 + 4 * i)->reals));
 is(join(' ', log($y)->reals), join(' ', log(7 + 5 * i)->reals));

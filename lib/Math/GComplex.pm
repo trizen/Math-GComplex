@@ -263,7 +263,7 @@ sub div {
 
     my $d = $y->{a} * $y->{a} + $y->{b} * $y->{b};
 
-    if (!ref($d) and $d == 0) {
+    if ($d == 0) {
         return $x->log->sub($y->log)->exp;
     }
 
@@ -416,6 +416,19 @@ sub pow {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
+    if ($x->{a} == 0 and $x->{b} == 0) {
+
+        if ($y->{a} == 0 and $y->{b} == 0) {
+            return __PACKAGE__->new($x->{a} + 1, $x->{b});
+        }
+
+        if ($y->{a} < 0) {
+            return $x->inv;
+        }
+
+        return __PACKAGE__->new($x->{a}, $x->{b});
+    }
+
     $x->log->mul($y)->exp;
 }
 
@@ -429,7 +442,7 @@ sub root ($$) {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
     $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
 
-    $x->log->div($y)->exp;
+    $x->pow($y->inv);
 }
 
 #
