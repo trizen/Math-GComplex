@@ -1,6 +1,6 @@
 Revision history for Math-GComplex
 
-0.08    2018-??-??
+0.08    2018-02-09
 
         - Added the `norm()` method.
         - Fixed `0**0` and `0**z` special cases in the `pow()` method.
