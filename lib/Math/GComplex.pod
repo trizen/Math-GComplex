@@ -48,7 +48,7 @@ The following functions are exportable:
 
     :misc
         cplx abs acmp sgn conj norm
-        inv real imag reals
+        inv real imag reals floor ceil
 
 Each function can be exported individually, as:
 

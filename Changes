@@ -1,5 +1,9 @@
 Revision history for Math-GComplex
 
+0.09    2018-??-??
+
+        - The `floor()` and `ceil()` functions are now included in the `:misc` export group.
+
 0.08    2018-02-09
 
         - Added the `norm()` method.

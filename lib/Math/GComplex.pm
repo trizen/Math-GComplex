@@ -55,12 +55,12 @@ use overload
                 );
 
     my %trig = (
-        sin => sub (_) { goto &sin },    # built-in function
+        sin   => sub (_) { goto &sin },    # built-in function
         sinh  => \&sinh,
         asin  => \&asin,
         asinh => \&asinh,
 
-        cos => sub (_) { goto &cos },    # built-in function
+        cos   => sub (_) { goto &cos },    # built-in function
         cosh  => \&cosh,
         acos  => \&acos,
         acosh => \&acosh,
@@ -114,6 +114,9 @@ use overload
 
         real => \&real,
         imag => \&imag,
+
+        floor => \&floor,
+        ceil  => \&ceil,
 
         reals => \&reals,
     );
