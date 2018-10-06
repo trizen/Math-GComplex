@@ -184,6 +184,19 @@ use overload
     }
 }
 
+#
+## Be somewhat compatible with Math::Complex
+#
+
+sub _cartesian {
+    my ($self) = @_;
+    [$self->{a}, $self->{b}];
+}
+
+#
+## Create a new Math::GComplex object
+#
+
 sub new {
     my ($class, $x, $y) = @_;
 
