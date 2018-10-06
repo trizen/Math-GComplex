@@ -2,8 +2,9 @@ Revision history for Math-GComplex
 
 0.10    2018-??-??
 
-        - Added the `_cartesian` private method, for basic compatibility with Math::Complex.
+        - Added the `_cartesian` and `_polar` private methods, for basic compatibility with Math::Complex.
         - Added the `make` alias for the `new` method, for basic compatibility with Math::Complex.
+        - Added the `emake` and `cplxe` methods, for basic compatibility with Math::Complex.
 
 0.09    2018-04-09
 

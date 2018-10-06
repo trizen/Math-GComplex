@@ -190,7 +190,12 @@ use overload
 
 sub _cartesian {
     my ($self) = @_;
-    [$self->{a}, $self->{b}];
+    $self->{cartesian} //= [$self->{a}, $self->{b}];
+}
+
+sub _polar {
+    my ($self) = @_;
+    $self->{polar} //= [CORE::sqrt($self->{a} * $self->{a} + $self->{b} * $self->{b}), CORE::atan2($self->{b}, $self->{a})];
 }
 
 #
@@ -218,6 +223,29 @@ sub cplx {
     bless {
            a => $x // 0,
            b => $y // 0,
+          },
+      __PACKAGE__;
+}
+
+sub emake {
+    my ($class, $r, $theta) = @_;
+
+    bless {
+           a => ($r // 0) * CORE::cos($theta // 0),
+           b => ($r // 0) * CORE::sin($theta // 0),
+          }, $class;
+}
+
+#
+## cplxe(r, theta) = r*cos(theta) + r*sin(theta)*i
+#
+
+sub cplxe {
+    my ($r, $theta) = @_;
+
+    bless {
+           a => ($r // 0) * CORE::cos($theta // 0),
+           b => ($r // 0) * CORE::sin($theta // 0),
           },
       __PACKAGE__;
 }

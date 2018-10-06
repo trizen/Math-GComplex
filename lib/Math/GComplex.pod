@@ -88,13 +88,25 @@ Nothing is exported by default.
     my $z = Math::GComplex->new($real, $imag);
     my $z = Math::GComplex->make($real, $imag);
 
-Creates and returns a new B<Math::GComplex> object.
+Create a new complex number, given its carteisan form.
 
 =head2 cplx
 
     my $z = cplx($real, $imag);
 
-Creates and returns a new B<Math::GComplex> object.
+Create a new complex number given its carteisan form.
+
+=head2 emake
+
+    my $z = Math::GComplex->emake($r, $theta);
+
+Create a new complex number, given its polar form.
+
+=head2 cplxe
+
+    my $z = cplxe($r, $theta);
+
+Create a new complex number, given its polar form.
 
 =head2 i
 
