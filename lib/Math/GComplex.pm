@@ -206,6 +206,8 @@ sub new {
           }, $class;
 }
 
+*make = \&new;
+
 #
 ## cplx(a, b) = a + b*i
 #

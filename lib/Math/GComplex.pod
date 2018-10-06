@@ -83,9 +83,10 @@ Nothing is exported by default.
 
 =head1 INITIALIZATION
 
-=head2 new
+=head2 new / make
 
     my $z = Math::GComplex->new($real, $imag);
+    my $z = Math::GComplex->make($real, $imag);
 
 Creates and returns a new B<Math::GComplex> object.
 
