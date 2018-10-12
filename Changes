@@ -1,6 +1,6 @@
 Revision history for Math-GComplex
 
-0.10    2018-??-??
+0.10    2018-10-13
 
         - Added the `_cartesian` and `_polar` private methods, for basic compatibility with Math::Complex.
         - Added the `make` alias for the `new` method, for basic compatibility with Math::Complex.

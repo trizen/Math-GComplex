@@ -6,7 +6,7 @@ Math::GComplex - Generic complex number library.
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =head1 SYNOPSIS
 
@@ -88,13 +88,13 @@ Nothing is exported by default.
     my $z = Math::GComplex->new($real, $imag);
     my $z = Math::GComplex->make($real, $imag);
 
-Create a new complex number, given its carteisan form.
+Create a new complex number, given its Cartesian coordinate form.
 
 =head2 cplx
 
     my $z = cplx($real, $imag);
 
-Create a new complex number given its carteisan form.
+Create a new complex number, given its Cartesian coordinate form.
 
 =head2 emake
 
