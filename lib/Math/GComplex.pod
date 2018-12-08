@@ -10,7 +10,7 @@ Version 0.10
 
 =head1 SYNOPSIS
 
-    use 5.014;
+    use 5.010;
     use Math::GComplex;
     use Math::AnyNum qw(:overload);
 

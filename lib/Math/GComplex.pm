@@ -504,10 +504,11 @@ sub pown ($$) {
     my ($rx, $ry) = (1, 0);
     my ($ax, $bx) = (@{$x}{qw(a b)});
 
-    do {
+    while (1) {
         ($rx, $ry) = ($rx * $ax - $ry * $bx, $rx * $bx + $ry * $ax) if ($y & 1);
+        ($y >>= 1) or last;
         ($ax, $bx) = ($ax * $ax - $bx * $bx, $ax * $bx + $bx * $ax);
-    } while ($y >>= 1);
+    }
 
     my $res = __PACKAGE__->new($rx, $ry);
     $neg_pow ? $res->inv : $res;
