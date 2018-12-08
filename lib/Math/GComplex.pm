@@ -98,6 +98,7 @@ use overload
                    cbrt => \&cbrt,
                    logn => \&logn,
                    root => \&root,
+                   pown => \&pown,
                   );
 
     my %misc = (
@@ -478,7 +479,7 @@ sub pow {
     $x->log->mul($y)->exp;
 }
 
-sub pown {
+sub pown ($$) {
     my ($x, $y) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
