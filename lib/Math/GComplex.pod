@@ -252,6 +252,12 @@ Raises C<$x> to power C<$y> and returns the result, defined as:
 
     a^b = exp(log(a) * b)
 
+=head2 pown
+
+    $x->pown($n)
+
+Raises C<$x> to power C<$n> and returns the result, where C<$n> is a native integer.
+
 =head2 root
 
     $x->root($y)

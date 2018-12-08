@@ -472,10 +472,44 @@ sub pow {
             return __PACKAGE__->new($x->{a} + 1, $x->{b});
         }
 
-        return __PACKAGE__->new($x->{a}, $x->{b});
+        return $x;
     }
 
     $x->log->mul($y)->exp;
+}
+
+sub pown {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $y = CORE::int($y);
+    my $neg_pow = $y < 0;
+    $y = CORE::int(CORE::abs($y));
+
+    if ($x->{a} == 0 and $x->{b} == 0) {
+
+        if ($neg_pow) {
+            return $x->inv;
+        }
+
+        if ($y == 0) {
+            return __PACKAGE__->new($x->{a} + 1, $x->{b});
+        }
+
+        return $x;
+    }
+
+    my ($rx, $ry) = (1, 0);
+    my ($ax, $bx) = (@{$x}{qw(a b)});
+
+    do {
+        ($rx, $ry) = ($rx * $ax - $ry * $bx, $rx * $bx + $ry * $ax) if ($y & 1);
+        ($ax, $bx) = ($ax * $ax - $bx * $bx, $ax * $bx + $bx * $ax);
+    } while ($y >>= 1);
+
+    my $res = __PACKAGE__->new($rx, $ry);
+    $neg_pow ? $res->inv : $res;
 }
 
 #
@@ -601,7 +635,7 @@ sub sin {
     $t1->{a} /= 2;
     $t1->{b} /= 2;
 
-    @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
+    @{$t1}{qw(a b)} = (-$t1->{b}, $t1->{a});
 
     $t1;
 }
@@ -642,7 +676,7 @@ sub asin ($) {
     $r->{b} += $x->{a};
 
     $r = $r->log;
-    @{$r}{'a', 'b'} = ($r->{b}, -$r->{a});
+    @{$r}{qw(a b)} = ($r->{b}, -$r->{a});
     $r;
 }
 
@@ -721,7 +755,7 @@ sub acos ($) {
     my $t1 = __PACKAGE__->new((1 - $x->{a}) / 2, $x->{b} / -2)->sqrt;
     my $t2 = __PACKAGE__->new((1 + $x->{a}) / 2, $x->{b} / +2)->sqrt;
 
-    @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
+    @{$t1}{qw(a b)} = (-$t1->{b}, $t1->{a});
 
     $t1->{a} += $t2->{a};
     $t1->{b} += $t2->{b};
@@ -731,7 +765,7 @@ sub acos ($) {
     $r->{a} *= -2;
     $r->{b} *= -2;
 
-    @{$r}{'a', 'b'} = (-$r->{b}, $r->{a});
+    @{$r}{qw(a b)} = (-$r->{b}, $r->{a});
 
     $r;
 }
@@ -788,7 +822,7 @@ sub tan ($) {
 
     $r->{a} -= 1;
 
-    @{$r}{'a', 'b'} = ($r->{b}, $r->{a});
+    @{$r}{qw(a b)} = ($r->{b}, $r->{a});
 
     $r;
 }
@@ -828,7 +862,7 @@ sub atan ($) {
     $t1->{a} /= 2;
     $t1->{b} /= 2;
 
-    @{$t1}{'a', 'b'} = (-$t1->{b}, $t1->{a});
+    @{$t1}{qw(a b)} = (-$t1->{b}, $t1->{a});
 
     $t1;
 }
@@ -847,7 +881,7 @@ sub atan2 {
 
     $t = $t->div($x->mul($x)->add($y->mul($y))->sqrt)->log;
 
-    @{$t}{'a', 'b'} = ($t->{b}, -$t->{a});
+    @{$t}{qw(a b)} = ($t->{b}, -$t->{a});
 
     $t;
 }
@@ -905,7 +939,7 @@ sub cot ($) {
 
     $r->{a} += 1;
 
-    @{$r}{'a', 'b'} = ($r->{b}, $r->{a});
+    @{$r}{qw(a b)} = ($r->{b}, $r->{a});
 
     $r;
 }
@@ -1062,7 +1096,7 @@ sub csc ($) {
         $t1->{b} /= $den;
     }
 
-    @{$t1}{'a', 'b'} = ($t1->{b}, $t1->{a});
+    @{$t1}{qw(a b)} = ($t1->{b}, $t1->{a});
 
     $t1;
 }
@@ -1120,7 +1154,7 @@ sub deg2rad ($) {
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
-    my $t = __PACKAGE__->new($x->{a} / 180, $x->{b} / 180);
+    my $t  = __PACKAGE__->new($x->{a} / 180, $x->{b} / 180);
     my $pi = CORE::atan2(0, -($x->{a} * $x->{a} + $x->{b} * $x->{b}));
 
     if (!ref($pi)) {
