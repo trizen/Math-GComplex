@@ -44,7 +44,7 @@ The following functions are exportable:
         atan2 deg2rad rad2deg
 
     :special
-        log logn exp sqrt cbrt root
+        log logn exp pow pown sqrt cbrt root
 
     :misc
         cplx abs acmp sgn conj norm
@@ -438,6 +438,53 @@ The ceil function, defined as:
 The integer-truncation function, defined as:
 
     int(a + b*i) = int(a) + int(b)*i
+
+=head2 and
+
+    $x & $y
+    $x->and($y)
+
+Bitwise AND-logical operation, defined as:
+
+    (a + b*i) & (x + y*i) = (a & x) + (b & y)*i
+
+=head2 or
+
+    $x | $y
+    $x->or($y)
+
+Bitwise OR-logical operation, defined as:
+
+    (a + b*i) | (x + y*i) = (a | x) + (b | y)*i
+
+=head2 xor
+
+    $x ^ $y
+    $x->xor($y)
+
+Bitwise XOR-logical operation, defined as:
+
+    (a + b*i) ^ (x + y*i) = (a ^ x) + (b ^ y)*i
+
+=head2 lsft
+
+    $x << $n
+    $x->lsft($n)
+
+Bitwise left-shift operation, defined as:
+
+    (a + b*i) << n         = (a << n) + (b << n)*i
+    (a + b*i) << (x + y*i) = int((a + b*i) * 2**(x + y*i))
+
+=head2 rsft
+
+    $x >> $n
+    $x->rsft($n)
+
+Bitwise right-shift operation, defined as:
+
+    (a + b*i) >> n         = (a >> n) + (b >> n)*i
+    (a + b*i) >> (x + y*i) = int((a + b*i) / 2**(x + y*i))
 
 =head2 real
 

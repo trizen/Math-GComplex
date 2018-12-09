@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More;
 
-plan tests => 69;
+plan tests => 74;
 
 use Math::GComplex qw(:overload acos cosh);
 
@@ -99,4 +99,16 @@ use Math::GComplex qw(:overload acos cosh);
 
     is((3 + 4 * i)->pown(7), 76443 + 16124 * i);
     is((3 + 4 * i)->pown(8), 164833 + 354144 * i);
+}
+
+{
+    my $z = 13 + 34 * i;
+    my $t = 24 + 97 * i;
+
+    is($z >> 1, 6 + 17 * i);
+    is($z << 3, 104 + 272 * i);
+
+    is($z | $t, 29 + 99 * i);
+    is($z & $t, 8 + 32 * i);
+    is($z ^ $t, 21 + 67 * i);
 }

@@ -18,6 +18,12 @@ use overload
   '!=' => \&ne,
 
   '~' => \&conj,
+  '&' => \&and,
+  '|' => \&or,
+  '^' => \&xor,
+
+  '>>' => \&rsft,
+  '<<' => \&lsft,
 
   '>'  => sub { $_[2] ? (goto &lt) : (goto &gt) },
   '>=' => sub { $_[2] ? (goto &le) : (goto &ge) },
@@ -98,6 +104,7 @@ use overload
                    cbrt => \&cbrt,
                    logn => \&logn,
                    root => \&root,
+                   pow  => \&pow,
                    pown => \&pown,
                   );
 
@@ -106,7 +113,7 @@ use overload
         acmp => \&acmp,
         cplx => \&cplx,
 
-        abs => sub (_) { goto &abs },         # built-in function
+        abs => sub (_) { goto &abs },    # built-in function
 
         inv  => \&inv,
         sgn  => \&sgn,
@@ -409,6 +416,83 @@ sub norm ($) {
 }
 
 #
+## (a+b*i) AND (x+y*i) = (a AND x) + (b AND y)*i
+#
+
+sub and {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    __PACKAGE__->new($x->{a} & $y->{a}, $x->{b} & $y->{b});
+}
+
+#
+## (a+b*i) OR (x+y*i) = (a OR x) + (b OR y)*i
+#
+
+sub or {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    __PACKAGE__->new($x->{a} | $y->{a}, $x->{b} | $y->{b});
+}
+
+#
+## (a+b*i) XOR (x+y*i) = (a XOR x) + (b XOR y)*i
+#
+
+sub xor {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    __PACKAGE__->new($x->{a} ^ $y->{a}, $x->{b} ^ $y->{b});
+}
+
+#
+## (a+b*i) << n       = (a << n) + (b << n)*i
+## (a+b*i) << (x+y*i) = int((a+b*i) * 2^(x+y*i))
+#
+
+sub lsft {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    if ($y->{b} == 0) {
+        return __PACKAGE__->new($x->{a} << $y->{a}, $x->{b} << $y->{a});
+    }
+
+    state $two = __PACKAGE__->new(2, 0);
+    $x->mul($two->pow($y))->int;
+}
+
+#
+## (a+b*i) >> n       = (a >> n) + (b >> n)*i
+## (a+b*i) >> (x+y*i) = int((a+b*i) / 2^(x+y*i))
+#
+
+sub rsft {
+    my ($x, $y) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $y = __PACKAGE__->new($y) if ref($y) ne __PACKAGE__;
+
+    if ($y->{b} == 0) {
+        return __PACKAGE__->new($x->{a} >> $y->{a}, $x->{b} >> $y->{a});
+    }
+
+    state $two = __PACKAGE__->new(2, 0);
+    $x->div($two->pow($y))->int;
+}
+
+#
 ## log(a + b*i) = log(a^2 + b^2)/2 + atan2(b, a)*i    -- where a,b are real
 #
 
@@ -485,12 +569,12 @@ sub pown ($$) {
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     $y = CORE::int($y);
-    my $neg_pow = $y < 0;
+    my $neg = $y < 0;
     $y = CORE::int(CORE::abs($y));
 
     if ($x->{a} == 0 and $x->{b} == 0) {
 
-        if ($neg_pow) {
+        if ($neg) {
             return $x->inv;
         }
 
@@ -511,7 +595,7 @@ sub pown ($$) {
     }
 
     my $res = __PACKAGE__->new($rx, $ry);
-    $neg_pow ? $res->inv : $res;
+    $neg ? $res->inv : $res;
 }
 
 #
