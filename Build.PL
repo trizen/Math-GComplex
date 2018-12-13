@@ -3,12 +3,13 @@ use utf8;
 use 5.006;
 use strict;
 use warnings;
+
 use Module::Build;
 
 my $builder = Module::Build->new(
     module_name         => 'Math::GComplex',
     license             => 'artistic_2',
-    dist_author         => q{Daniel Șuteu <trizen@protonmail.com>},
+    dist_author         => q{Daniel Șuteu <trizen@cpan.org>},
     dist_version_from   => 'lib/Math/GComplex.pm',
     release_status      => 'stable',
 

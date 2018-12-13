@@ -6,7 +6,7 @@ Math::GComplex - Generic complex number library.
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =head1 SYNOPSIS
 
@@ -50,11 +50,11 @@ The following functions are exportable:
         cplx abs acmp sgn conj norm
         inv real imag reals floor ceil
 
-Each function can be exported individually, as:
+Multiple functions can be exported as:
 
-    use Math::GComplex qw(acosh);
+    use Math::GComplex qw(acos acosh);
 
-There is also the possibility of exporting an entire group of functions, as:
+There is also the possibility of exporting an entire group of functions, by specifying their group name, as:
 
     use Math::GComplex qw(:trig);
 
@@ -83,28 +83,18 @@ Nothing is exported by default.
 
 =head1 INITIALIZATION
 
-=head2 new / make
+=head2 new / cplx / make
 
+    my $z = cplx($real, $imag);
     my $z = Math::GComplex->new($real, $imag);
     my $z = Math::GComplex->make($real, $imag);
 
 Create a new complex number, given its Cartesian coordinate form.
 
-=head2 cplx
-
-    my $z = cplx($real, $imag);
-
-Create a new complex number, given its Cartesian coordinate form.
-
-=head2 emake
-
-    my $z = Math::GComplex->emake($r, $theta);
-
-Create a new complex number, given its polar form.
-
-=head2 cplxe
+=head2 cplxe / emake
 
     my $z = cplxe($r, $theta);
+    my $z = Math::GComplex->emake($r, $theta);
 
 Create a new complex number, given its polar form.
 
@@ -607,7 +597,7 @@ However the user may still encounter incorrect results due to rounding errors an
 
 =head1 AUTHOR
 
-Daniel Șuteu, C<< <trizen at protonmail.com> >>
+Daniel Șuteu, C<< <trizen at cpan.org> >>
 
 =head1 BUGS
 
