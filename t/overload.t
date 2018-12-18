@@ -5,9 +5,9 @@ use strict;
 use warnings;
 use Test::More;
 
-plan tests => 74;
+plan tests => 85;
 
-use Math::GComplex qw(:overload acos cosh);
+use Math::GComplex qw(:overload acos cosh pown powm);
 
 {
     my @A097691 = qw(8 56 551 6930 105937 1905632 39424240);    # https://oeis.org/A097691
@@ -87,11 +87,11 @@ use Math::GComplex qw(:overload acos cosh);
 }
 
 {
-    is((0)->pown(0),  1);
-    is((0)->pown(3),  0);
-    is((1)->pown(5),  1);
-    is((1)->pown(-5), 1);
-    is((2)->pown(-5), 0.03125);
+    is(pown(0, 0),  1);
+    is(pown(0, 3),  0);
+    is(pown(1, 5),  1);
+    is(pown(1, -5), 1);
+    is(pown(2, -5), 0.03125);
 
     my $n = 2 + 3 * i;
     is($n->pown('10'), -341525 - 145668 * i);
@@ -111,4 +111,20 @@ use Math::GComplex qw(:overload acos cosh);
     is($z | $t, 29 + 99 * i);
     is($z & $t, 8 + 32 * i);
     is($z ^ $t, 21 + 67 * i);
+}
+
+{
+    is(join(' ', powm(2 + i,  100, 1234567)->reals), '498832 667730');
+    is(join(' ', powm(-2 -i,  99,  1234567)->reals), '160748 820328');
+    is(join(' ', powm(2 -i,   99,  1234567)->reals), '1073819 820328');
+    is(join(' ', powm(-2 + i, 99,  1234567)->reals), '160748 414239');
+
+    is(powm(2, 96, 97), 1);
+    is(powm(2, 43, 43), 2);
+    is(powm(i, 43, 43), 0 + 42 * i);
+    is(powm(i, 42, 43), 42);
+
+    is(powm(1 -i,  43 - 1, 43),         i);
+    is(powm(1 -i,  43 - 1, 43 + 3 * i), 36 + 14 * i);
+    is(powm(2 + i, 43,     43 + 3 * i), 39 + 44 * i);
 }

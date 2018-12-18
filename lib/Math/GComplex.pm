@@ -106,6 +106,7 @@ use overload
                    root => \&root,
                    pow  => \&pow,
                    pown => \&pown,
+                   powm => \&powm,
                   );
 
     my %misc = (
@@ -541,7 +542,7 @@ sub exp {
 ## x^y = exp(log(x) * y)
 #
 
-sub pow {
+sub pow ($$) {
     my ($x, $y) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -562,6 +563,10 @@ sub pow {
 
     $x->log->mul($y)->exp;
 }
+
+#
+## x^n using the exponentiation by squaring method
+#
 
 sub pown ($$) {
     my ($x, $y) = @_;
@@ -594,8 +599,46 @@ sub pown ($$) {
         ($ax, $bx) = ($ax * $ax - $bx * $bx, $ax * $bx + $bx * $ax);
     }
 
-    my $res = __PACKAGE__->new($rx, $ry);
-    $neg ? $res->inv : $res;
+    $neg ? __PACKAGE__->new($rx, $ry)->inv : __PACKAGE__->new($rx, $ry);
+}
+
+#
+## x^n mod m using the exponentiation by squaring method
+#
+
+sub powm ($$$) {
+    my ($x, $y, $m) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+
+    $y = CORE::int($y);
+    my $neg = $y < 0;
+    $y = CORE::int(CORE::abs($y));
+
+    if ($x->{a} == 0 and $x->{b} == 0) {
+
+        if ($neg) {
+            return $x->inv->mod($m);
+        }
+
+        if ($y == 0) {
+            return __PACKAGE__->new($x->{a} + 1, $x->{b})->mod($m);
+        }
+
+        return $x->mod($m);
+    }
+
+    $x = $x->inv if $neg;
+
+    my $r = __PACKAGE__->new(1, 0);
+
+    while (1) {
+        $r = $r->mul($x)->mod($m) if ($y & 1);
+        ($y >>= 1) or last;
+        $x = $x->mul($x)->mod($m);
+    }
+
+    $r->mod($m);
 }
 
 #

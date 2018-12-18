@@ -9,11 +9,11 @@ BEGIN {
     eval { require Math::AnyNum };
     plan skip_all => "Math::AnyNum is not installed"
       if $@;
-    plan skip_all => "Math::AnyNum >= 0.20 is needed"
-      if ($Math::AnyNum::VERSION < 0.20);
+    plan skip_all => "Math::AnyNum >= 0.30 is needed"
+      if ($Math::AnyNum::VERSION < 0.30);
 }
 
-plan tests => 343;
+plan tests => 351;
 
 use Math::GComplex;
 use Math::AnyNum qw(:overload);
@@ -505,7 +505,20 @@ is(join(' ', Math::GComplex->new(0)->pown(10)->reals), '0 0');
 is(join(' ', Math::GComplex->new(0, 1)->pown(3)->reals), '0 -1');
 is(join(' ', Math::GComplex->new(0, 1)->pown(4)->reals), '1 0');
 
+#<<<
 is(join(' ', Math::GComplex->new(3, 4)->pown(10)->reals),  '-9653287 1476984');
 is(join(' ', Math::GComplex->new(3, 4)->pown(-10)->reals), '-9653287/95367431640625 -1476984/95367431640625');
-is(join(' ', Math::GComplex->new(-9, -12)->pown(-13)->reals),
-    '-354815761/791908800601959228515625 -597551756/2375726401805877685546875');
+is(join(' ', Math::GComplex->new(-9, -12)->pown(-13)->reals), '-354815761/791908800601959228515625 -597551756/2375726401805877685546875');
+#>>>
+
+#<<<
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(1/10, 3/10), -15, 123456789)->reals), join(' ', (Math::AnyNum::complex(1/10, 3/10)**(-15) % 123456789)->reals));
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(1/10, 3/10), -16, 123456789)->reals), join(' ', (Math::AnyNum::complex(1/10, 3/10)**(-16) % 123456789)->reals));
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(1/10, 3/10), -20, 123456789)->reals), join(' ', (Math::AnyNum::complex(1/10, 3/10)**(-20) % 123456789)->reals));
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(1/10, 3/10), -30, 123456789)->reals), join(' ', (Math::AnyNum::complex(1/10, 3/10)**(-30) % 123456789)->reals));
+#>>>
+
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(2,  1),  100, 1234567)->reals), '498832 667730');
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(-2, -1), 99,  1234567)->reals), '160748 820328');
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(2,  -1), 99,  1234567)->reals), '1073819 820328');
+is(join(' ', Math::GComplex::powm(Math::GComplex->new(-2, 1),  99,  1234567)->reals), '160748 414239');
