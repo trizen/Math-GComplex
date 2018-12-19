@@ -615,17 +615,19 @@ sub gcd ($$) {
     $n = __PACKAGE__->new($n) if ref($n) ne __PACKAGE__;
     $k = __PACKAGE__->new($k) if ref($k) ne __PACKAGE__;
 
-    my ($x, $y) = ($n, $k);
+    my $norm_n = $n->{a} * $n->{a} + $n->{b} * $n->{b};
+    my $norm_k = $k->{a} * $k->{a} + $k->{b} * $k->{b};
+
+    if ($norm_n > $norm_k) {
+        ($n, $k) = ($k, $n);
+    }
 
     while (!($k->{a} == 0 and $k->{b} == 0)) {
 
-        ($n, $k) = ($k, $n % $k);
-        ($x, $y) = ($y, $x % $y) if !($y->{a} == 0 and $y->{b} == 0);
-        ($x, $y) = ($y, $x % $y) if !($y->{a} == 0 and $y->{b} == 0);
+        my $q = $n->div($k)->round;
+        my $r = $n->sub($q->mul($k));
 
-        if (!($y->{a} == 0 and $y->{b} == 0) and $n == $x and $y == $k) {
-            return undef;    # cycle detected
-        }
+        ($n, $k) = ($k, $r);
     }
 
     $n;
@@ -643,7 +645,7 @@ sub invmod ($$) {
 
     my $g = $x->gcd($m);
 
-    (defined($g) and $g->abs == 1) or return undef;
+    $g->abs == 1 or return undef;
 
     state $zero = __PACKAGE__->new(0, 0);
 
@@ -655,8 +657,11 @@ sub invmod ($$) {
 
         my $c = $m;
 
-        while ($c != 0) {
-            ($q, $r) = ($x->div($c)->floor, $x->mod($c));
+        while (!($c->{a} == 0 and $c->{b} == 0)) {
+
+            $q = $x->div($c)->round;
+            $r = $x->sub($q->mul($c));
+
             ($x, $c) = ($c, $r);
             ($u, $w) = ($w, $u->sub($q->mul($w)));
         }
@@ -670,12 +675,13 @@ sub invmod ($$) {
     state $i  = __PACKAGE__->new(0, 1);
     state $mi = __PACKAGE__->new(0, -1);
 
-    foreach my $k ($one, $mone, $i, $mi) {
+    foreach my $k ($g->conj, $one, $mone, $i, $mi) {
+
         my $inv = $inverse->($x, $m, $k);
         my $t   = $x->mul($inv)->mod($m);
 
         if ($t->{a} == 1 and $t->{b} == 0) {
-            return $inv;
+            return $inv->mod($m);
         }
     }
 
@@ -787,6 +793,29 @@ sub int {
     my $t2 = CORE::int($x->{b});
 
     __PACKAGE__->new($t1, $t2);
+}
+
+#
+## round to the nearest Gaussian integer
+#
+
+sub _round ($) {
+    my ($n) = @_;
+
+    my $neg = $n < 0;
+
+    $n = ($n + $n + ($neg ? -1 : +1)) / 2;
+    $n = CORE::int($n);
+
+    $n;
+}
+
+sub round ($) {
+    my ($n) = @_;
+
+    $n = __PACKAGE__->new($n) if ref($n) ne __PACKAGE__;
+
+    __PACKAGE__->new(_round($n->{a}), _round($n->{b}));
 }
 
 #

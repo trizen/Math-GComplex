@@ -516,20 +516,21 @@ is(join(' ', Math::GComplex::powm(Math::GComplex->new(-2, -1), 99,  1234567)->re
 is(join(' ', Math::GComplex::powm(Math::GComplex->new(2,  -1), 99,  1234567)->reals), '1073819 820328');
 is(join(' ', Math::GComplex::powm(Math::GComplex->new(-2, 1),  99,  1234567)->reals), '160748 414239');
 
-is(join(' ', Math::GComplex::invmod(42, 2017)->reals), '-48 0');
+is(join(' ', Math::GComplex::invmod(42, 2017)->reals), '1969 0');
 is(join(' ', Math::GComplex::invmod(Math::GComplex::cplx(3,  4),   2017)->reals),    '1291 968');
 is(join(' ', Math::GComplex::invmod(Math::GComplex::cplx(91, 23),  2017)->reals),    '590 405');
-is(join(' ', Math::GComplex::invmod(Math::GComplex::cplx(43, 99),  1234567)->reals), '-215016 -567265');
+is(join(' ', Math::GComplex::invmod(Math::GComplex::cplx(43, 99),  1234567)->reals), '1019551 667302');
 is(join(' ', Math::GComplex::invmod(Math::GComplex::cplx(43, 415), 103)->reals),     '88 25');
 
-ok(!defined(Math::GComplex::cplx(43, 99)->invmod(2017)));
 ok(!defined(Math::GComplex::cplx(43, 99)->invmod(1234)));
-ok(!defined(Math::GComplex::gcd(2017, Math::GComplex::cplx(43, 99))));
 
-is(join(' ', Math::GComplex::gcd(54054, 1235234)->reals), '2002 0');
+is(join(' ', Math::GComplex::cplx(43, 99)->invmod(2017)->reals), "1709 1272");
+is(join(' ', Math::GComplex::gcd(2017, Math::GComplex::cplx(43, 99))->reals), '0 -1');
+
+is(join(' ', Math::GComplex::gcd(54054, 1235234)->reals), '-2002 0');
 is(join(' ', Math::GComplex::cplx(3,  4)->gcd(25)->reals),    '3 4');
-is(join(' ', Math::GComplex::cplx(43, 99)->gcd(1234)->reals), '1 1');
-is(join(' ', Math::GComplex::gcd(1234, Math::GComplex::cplx(43, 99))->reals), '1 1');
+is(join(' ', Math::GComplex::cplx(43, 99)->gcd(1234)->reals), '-1 -1');
+is(join(' ', Math::GComplex::gcd(1234, Math::GComplex::cplx(43, 99))->reals), '-1 -1');
 is(join(' ', Math::GComplex::cplx(1413, -194)->gcd(Math::GComplex::cplx(13, -34))->reals), '-2 1');
 is(join(' ', Math::GComplex::gcd(Math::GComplex::cplx(11, 12), Math::GComplex::cplx(6, 21))->reals), '-2 -7');
 

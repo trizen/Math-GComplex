@@ -445,6 +445,12 @@ The ceil function, defined as:
 
     ceil(a + b*i) = ceil(a) + ceil(b)*i
 
+=head2 round
+
+    $x->round
+
+Round C<$x> to the nearest Gaussian integer.
+
 =head2 int
 
     int($x)
