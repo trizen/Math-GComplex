@@ -617,9 +617,7 @@ sub gcd ($$) {
 
     my ($x, $y) = ($n, $k);
 
-    state $zero = __PACKAGE__->new(0, 0);
-
-    while ($k != $zero) {
+    while (!($k->{a} == 0 and $k->{b} == 0)) {
 
         ($n, $k) = ($k, $n % $k);
         ($x, $y) = ($y, $x % $y) if !($y->{a} == 0 and $y->{b} == 0);

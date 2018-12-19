@@ -44,7 +44,8 @@ The following functions are exportable:
         atan2 deg2rad rad2deg
 
     :special
-        log logn exp pow pown powm sqrt cbrt root
+        pown powm gcd invmod
+        log logn exp pow sqrt cbrt root
 
     :misc
         cplx abs acmp sgn conj norm
@@ -253,6 +254,24 @@ Raises C<$x> to power C<$n> and returns the result, where C<$n> is a native inte
     $x->powm($n, $m)
 
 Modular exponentiation C<$x**$n % $m>, where C<$n> is a native integer.
+
+=head2 gcd
+
+    $n->gcd($k)
+
+Greatest common divisors of two complex numbers.
+
+=head2 invmod
+
+    $n->invmod($m)
+
+Modular multiplicative inverse of two complex numbers.
+
+The returned value is the solution to C<x> in:
+
+    n*x = 1 (mod m)
+
+Returns C<undef> when a multiplicative inverse mod C<m> does not exist.
 
 =head2 root
 

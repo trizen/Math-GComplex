@@ -135,6 +135,9 @@ is(join(' ', Math::GComplex::invmod(91 + 23 * i,  2017)->reals),    '590 405');
 is(join(' ', Math::GComplex::invmod(43 + 99 * i,  1234567)->reals), '-215016 -567265');
 is(join(' ', Math::GComplex::invmod(43 + 415 * i, 103)->reals),     '88 25');
 
+# TODO: fix this
+#is(join(' ', Math::GComplex::gcd(135-14*i, 155+34*i)->reals), '5 12');
+
 {
     my $m = 2019;
     my $x = 3 + 4 * i;
