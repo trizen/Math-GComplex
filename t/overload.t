@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Test::More;
 
-plan tests => 85;
+plan tests => 92;
 
 use Math::GComplex qw(:overload acos cosh pown powm);
 
@@ -127,4 +127,21 @@ use Math::GComplex qw(:overload acos cosh pown powm);
     is(powm(1 -i,  43 - 1, 43),         i);
     is(powm(1 -i,  43 - 1, 43 + 3 * i), 36 + 14 * i);
     is(powm(2 + i, 43,     43 + 3 * i), 39 + 44 * i);
+}
+
+is(join(' ', Math::GComplex::invmod(42,           2017)->reals),    '-48 0');
+is(join(' ', Math::GComplex::invmod(3 + 4 * i,    2017)->reals),    '1291 968');
+is(join(' ', Math::GComplex::invmod(91 + 23 * i,  2017)->reals),    '590 405');
+is(join(' ', Math::GComplex::invmod(43 + 99 * i,  1234567)->reals), '-215016 -567265');
+is(join(' ', Math::GComplex::invmod(43 + 415 * i, 103)->reals),     '88 25');
+
+{
+    my $m = 2019;
+    my $x = 3 + 4 * i;
+
+    my $x1 = Math::GComplex::powm($x, -42, $m);
+    my $x2 = Math::GComplex::powm($x, 42,  $m);
+
+    is(join(' ', $x1->reals), '1520 1407');
+    is(join(' ', $x2->reals), '305 1212');
 }

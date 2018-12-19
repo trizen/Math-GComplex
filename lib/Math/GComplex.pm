@@ -98,16 +98,21 @@ use overload
                );
 
     my %special = (
-                   exp  => sub (_) { goto &exp },        # built-in function
-                   log  => sub (_) { goto &log },        # built-in function
-                   sqrt => sub (_) { goto &sqrt },       # built-in function
-                   cbrt => \&cbrt,
-                   logn => \&logn,
-                   root => \&root,
-                   pow  => \&pow,
-                   pown => \&pown,
-                   powm => \&powm,
-                  );
+
+        exp  => sub (_) { goto &exp },        # built-in function
+        log  => sub (_) { goto &log },        # built-in function
+        sqrt => sub (_) { goto &sqrt },       # built-in function
+
+        cbrt => \&cbrt,
+        logn => \&logn,
+        root => \&root,
+        pow  => \&pow,
+        pown => \&pown,
+        powm => \&powm,
+
+        gcd    => \&gcd,
+        invmod => \&invmod,
+    );
 
     my %misc = (
 
@@ -344,8 +349,6 @@ sub mod {
 
 sub inv ($) {
     my ($x) = @_;
-
-    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
 
     state $one = __PACKAGE__->new(1, 0);
 
@@ -603,6 +606,85 @@ sub pown ($$) {
 }
 
 #
+## Greatest common divisor
+#
+
+sub gcd ($$) {
+    my ($n, $k) = @_;
+
+    $n = __PACKAGE__->new($n) if ref($n) ne __PACKAGE__;
+    $k = __PACKAGE__->new($k) if ref($k) ne __PACKAGE__;
+
+    my ($x, $y) = ($n, $k);
+
+    state $zero = __PACKAGE__->new(0, 0);
+
+    while ($k != $zero) {
+
+        ($n, $k) = ($k, $n % $k);
+        ($x, $y) = ($y, $x % $y) if !($y->{a} == 0 and $y->{b} == 0);
+        ($x, $y) = ($y, $x % $y) if !($y->{a} == 0 and $y->{b} == 0);
+
+        if (!($y->{a} == 0 and $y->{b} == 0) and $n == $x and $y == $k) {
+            return undef;    # cycle detected
+        }
+    }
+
+    $n;
+}
+
+#
+## Modular multiplicative inverse: 1/x (mod m)
+#
+
+sub invmod ($$) {
+    my ($x, $m) = @_;
+
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $m = __PACKAGE__->new($m) if ref($m) ne __PACKAGE__;
+
+    my $g = $x->gcd($m);
+
+    (defined($g) and $g->abs == 1) or return undef;
+
+    state $zero = __PACKAGE__->new(0, 0);
+
+    my $inverse = sub {
+        my ($x, $m, $k) = @_;
+
+        my ($u, $w) = ($k, $zero);
+        my ($q, $r);
+
+        my $c = $m;
+
+        while ($c != 0) {
+            ($q, $r) = ($x->div($c)->floor, $x->mod($c));
+            ($x, $c) = ($c, $r);
+            ($u, $w) = ($w, $u->sub($q->mul($w)));
+        }
+
+        return $u;
+    };
+
+    state $one  = __PACKAGE__->new(1,  0);
+    state $mone = __PACKAGE__->new(-1, 0);
+
+    state $i  = __PACKAGE__->new(0, 1);
+    state $mi = __PACKAGE__->new(0, -1);
+
+    foreach my $k ($one, $mone, $i, $mi) {
+        my $inv = $inverse->($x, $m, $k);
+        my $t   = $x->mul($inv)->mod($m);
+
+        if ($t->{a} == 1 and $t->{b} == 0) {
+            return $inv;
+        }
+    }
+
+    return undef;
+}
+
+#
 ## x^n mod m using the exponentiation by squaring method
 #
 
@@ -610,6 +692,7 @@ sub powm ($$$) {
     my ($x, $y, $m) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    $m = __PACKAGE__->new($m) if ref($m) ne __PACKAGE__;
 
     $y = CORE::int($y);
     my $neg = $y < 0;
@@ -618,7 +701,7 @@ sub powm ($$$) {
     if ($x->{a} == 0 and $x->{b} == 0) {
 
         if ($neg) {
-            return $x->inv->mod($m);
+            return $x->invmod($m);
         }
 
         if ($y == 0) {
@@ -628,7 +711,8 @@ sub powm ($$$) {
         return $x->mod($m);
     }
 
-    $x = $x->inv if $neg;
+    $x = $x->invmod($m) if $neg;
+    $x // return undef;
 
     my $r = __PACKAGE__->new(1, 0);
 
