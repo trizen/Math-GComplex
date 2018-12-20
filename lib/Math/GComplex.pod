@@ -48,8 +48,8 @@ The following functions are exportable:
         log logn exp pow pown sqrt cbrt root
 
     :misc
-        cplx abs acmp sgn conj norm
-        inv real imag reals floor ceil
+        cplx abs acmp sgn conj norm inv
+        real imag reals floor ceil round
 
 Multiple functions can be exported as:
 
@@ -450,6 +450,11 @@ The ceil function, defined as:
     $x->round
 
 Round C<$x> to the nearest Gaussian integer.
+
+The half away from zero tie-breaking method is used, such that:
+
+    round(+0.5) = +1
+    round(-0.5) = -1
 
 =head2 int
 

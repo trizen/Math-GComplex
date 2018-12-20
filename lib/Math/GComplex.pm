@@ -131,6 +131,7 @@ use overload
 
         floor => \&floor,
         ceil  => \&ceil,
+        round => \&round,
 
         reals => \&reals,
     );
