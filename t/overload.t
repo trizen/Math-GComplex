@@ -7,7 +7,7 @@ use Test::More;
 
 plan tests => 94;
 
-use Math::GComplex qw(:overload acos cosh pown powm);
+use Math::GComplex qw(:overload acos cosh pown powmod);
 
 {
     my @A097691 = qw(8 56 551 6930 105937 1905632 39424240);    # https://oeis.org/A097691
@@ -114,19 +114,19 @@ use Math::GComplex qw(:overload acos cosh pown powm);
 }
 
 {
-    is(join(' ', powm(2 + i,  100, 1234567)->reals), '498832 667730');
-    is(join(' ', powm(-2 -i,  99,  1234567)->reals), '160748 820328');
-    is(join(' ', powm(2 -i,   99,  1234567)->reals), '1073819 820328');
-    is(join(' ', powm(-2 + i, 99,  1234567)->reals), '160748 414239');
+    is(join(' ', powmod(2 + i,  100, 1234567)->reals), '498832 667730');
+    is(join(' ', powmod(-2 -i,  99,  1234567)->reals), '160748 820328');
+    is(join(' ', powmod(2 -i,   99,  1234567)->reals), '1073819 820328');
+    is(join(' ', powmod(-2 + i, 99,  1234567)->reals), '160748 414239');
 
-    is(powm(2, 96, 97), 1);
-    is(powm(2, 43, 43), 2);
-    is(powm(i, 43, 43), 0 + 42 * i);
-    is(powm(i, 42, 43), 42);
+    is(powmod(2, 96, 97), 1);
+    is(powmod(2, 43, 43), 2);
+    is(powmod(i, 43, 43), 0 + 42 * i);
+    is(powmod(i, 42, 43), 42);
 
-    is(powm(1 -i,  43 - 1, 43),         i);
-    is(powm(1 -i,  43 - 1, 43 + 3 * i), 36 + 14 * i);
-    is(powm(2 + i, 43,     43 + 3 * i), 39 + 44 * i);
+    is(powmod(1 -i,  43 - 1, 43),         i);
+    is(powmod(1 -i,  43 - 1, 43 + 3 * i), 36 + 14 * i);
+    is(powmod(2 + i, 43,     43 + 3 * i), 39 + 44 * i);
 }
 
 is(join(' ', Math::GComplex::invmod(42,           2017)->reals),    '1969 0');
@@ -142,8 +142,8 @@ is(join(' ', Math::GComplex::gcd(155 + 34 * i, 135 - 14 * i)->reals), '5 12');
     my $m = 2019;
     my $x = 3 + 4 * i;
 
-    my $x1 = Math::GComplex::powm($x, -42, $m);
-    my $x2 = Math::GComplex::powm($x, 42,  $m);
+    my $x1 = Math::GComplex::powmod($x, -42, $m);
+    my $x2 = Math::GComplex::powmod($x, 42,  $m);
 
     is(join(' ', $x1->reals), '1520 1407');
     is(join(' ', $x2->reals), '305 1212');

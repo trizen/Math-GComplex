@@ -108,10 +108,10 @@ use overload
         root => \&root,
         pow  => \&pow,
         pown => \&pown,
-        powm => \&powm,
 
         gcd    => \&gcd,
         invmod => \&invmod,
+        powmod => \&powmod,
     );
 
     my %misc = (
@@ -692,7 +692,7 @@ sub invmod ($$) {
 ## x^n mod m using the exponentiation by squaring method
 #
 
-sub powm ($$$) {
+sub powmod ($$$) {
     my ($x, $y, $m) = @_;
 
     $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
@@ -801,21 +801,13 @@ sub int {
 
 sub _round ($) {
     my ($n) = @_;
-
-    my $neg = $n < 0;
-
-    $n = ($n + $n + ($neg ? -1 : +1)) / 2;
-    $n = CORE::int($n);
-
-    $n;
+    CORE::int(($n + $n + (($n < 0) ? -1 : 1)) / 2);
 }
 
 sub round ($) {
-    my ($n) = @_;
-
-    $n = __PACKAGE__->new($n) if ref($n) ne __PACKAGE__;
-
-    __PACKAGE__->new(_round($n->{a}), _round($n->{b}));
+    my ($x) = @_;
+    $x = __PACKAGE__->new($x) if ref($x) ne __PACKAGE__;
+    __PACKAGE__->new(_round($x->{a}), _round($x->{b}));
 }
 
 #

@@ -44,8 +44,8 @@ The following functions are exportable:
         atan2 deg2rad rad2deg
 
     :special
-        pown powm gcd invmod
-        log logn exp pow sqrt cbrt root
+        gcd invmod powmod
+        log logn exp pow pown sqrt cbrt root
 
     :misc
         cplx abs acmp sgn conj norm
@@ -249,9 +249,9 @@ Raises C<$x> to power C<$y> and returns the result, defined as:
 
 Raises C<$x> to power C<$n> and returns the result, where C<$n> is a native integer.
 
-=head2 powm
+=head2 powmod
 
-    $x->powm($n, $m)
+    $x->powmod($n, $m)
 
 Modular exponentiation C<$x**$n % $m>, where C<$n> is a native integer.
 

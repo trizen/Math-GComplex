@@ -511,10 +511,10 @@ is(join(' ', Math::GComplex->new(3, 4)->pown(-10)->reals), '-9653287/95367431640
 is(join(' ', Math::GComplex->new(-9, -12)->pown(-13)->reals), '-354815761/791908800601959228515625 -597551756/2375726401805877685546875');
 #>>>
 
-is(join(' ', Math::GComplex::powm(Math::GComplex->new(2,  1),  100, 1234567)->reals), '498832 667730');
-is(join(' ', Math::GComplex::powm(Math::GComplex->new(-2, -1), 99,  1234567)->reals), '160748 820328');
-is(join(' ', Math::GComplex::powm(Math::GComplex->new(2,  -1), 99,  1234567)->reals), '1073819 820328');
-is(join(' ', Math::GComplex::powm(Math::GComplex->new(-2, 1),  99,  1234567)->reals), '160748 414239');
+is(join(' ', Math::GComplex::powmod(Math::GComplex->new(2,  1),  100, 1234567)->reals), '498832 667730');
+is(join(' ', Math::GComplex::powmod(Math::GComplex->new(-2, -1), 99,  1234567)->reals), '160748 820328');
+is(join(' ', Math::GComplex::powmod(Math::GComplex->new(2,  -1), 99,  1234567)->reals), '1073819 820328');
+is(join(' ', Math::GComplex::powmod(Math::GComplex->new(-2, 1),  99,  1234567)->reals), '160748 414239');
 
 is(join(' ', Math::GComplex::invmod(42, 2017)->reals), '1969 0');
 is(join(' ', Math::GComplex::invmod(Math::GComplex::cplx(3,  4),   2017)->reals),    '1291 968');
@@ -546,8 +546,8 @@ is(join(' ', Math::GComplex::gcd(Math::GComplex::cplx(11, 12), Math::GComplex::c
     my $m = 2019;
     my $x = Math::GComplex->new(3, 4);
 
-    my $x1 = Math::GComplex::powm($x, -42, $m);
-    my $x2 = Math::GComplex::powm($x, 42,  $m);
+    my $x1 = Math::GComplex::powmod($x, -42, $m);
+    my $x2 = Math::GComplex::powmod($x, 42,  $m);
 
     is(join(' ', $x1->reals), '1520 1407');
     is(join(' ', $x2->reals), '305 1212');
