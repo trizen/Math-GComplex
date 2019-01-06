@@ -6,7 +6,7 @@ Math::GComplex - Generic complex number library.
 
 =head1 VERSION
 
-Version 0.11
+Version 0.12
 
 =head1 SYNOPSIS
 
@@ -692,7 +692,7 @@ L<Math::Complex> - complex numbers and associated mathematical functions.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2018 Daniel Șuteu.
+Copyright 2018-2019 Daniel Șuteu.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the the Artistic License (2.0). You may obtain a
