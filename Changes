@@ -1,5 +1,10 @@
 Revision history for Math-GComplex
 
+0.13    2019-??-??
+
+        - Added the `polar` method to return the polar form of the self number.
+        - Minor documentation improvements.
+
 0.12    2019-01-07
 
         - Added the `round(z)` method to round `z` to the nearest Gaussian integer.
