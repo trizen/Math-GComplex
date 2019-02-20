@@ -300,7 +300,7 @@ Cube root of C<x>, defined as:
 
 =head1 TRIGONOMETRIC FUNCTIONS
 
-This section includes all the trigonometric functions provied by Math::GComplex.
+This section includes all the trigonometric functions provided by Math::GComplex.
 
 =head2 sin / sinh / asin / asinh
 
