@@ -13,6 +13,7 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Math/GComplex.pm',
     release_status      => 'stable',
 
+    sign              => 1,
     dynamic_config    => 0,
     extra_manify_args => { utf8 => 1 },
 
